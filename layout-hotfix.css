@@ -1,68 +1,157 @@
-/* ProfeGo layout hotfix v2: dashboard compacto, sin huecos */
-#page-home .home-right,
-#page-home .rescue-card,
-#page-home .tip-card,
-#page-home [class*="rescue"],
-#page-home [class*="tip"]{display:none!important}
+/* ProfeGo layout hotfix v3 — usar TODO el ancho del dashboard real */
 
-/* El home usa todo el ancho disponible */
+/* Home real */
 #page-home,
-#page-home .home-shell,
-#page-home .home-grid,
-#page-home .dashboard-grid,
-#page-home .home-layout,
-#page-home .home-main,
-#page-home .home-center,
-#page-home .dashboard-main{width:100%!important;max-width:none!important;min-width:0!important}
-#page-home .home-shell{padding:16px 18px 24px!important;margin:0!important}
-#page-home .home-grid,
-#page-home .dashboard-grid,
-#page-home .home-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
-#page-home .home-main,
-#page-home .home-center,
-#page-home .dashboard-main{grid-column:1!important}
-
-/* Encabezado mejor repartido */
-#page-home .home-top{display:grid!important;grid-template-columns:minmax(240px,1fr) auto!important;align-items:center!important;gap:14px!important}
-#page-home .home-top-controls{display:grid!important;grid-template-columns:repeat(3,minmax(170px,1fr))!important;gap:10px!important;align-items:stretch!important}
-#page-home .top-select,
-#page-home .drive-pill,
-#page-home .profile-mini{width:100%!important;min-width:0!important;height:auto!important;min-height:62px!important}
-
-/* Hero ocupa todo el ancho y deja menos aire */
-#page-home .welcome-card{width:100%!important;min-height:150px!important;height:auto!important;padding:22px 26px!important;display:grid!important;grid-template-columns:minmax(260px,1.25fr) minmax(250px,.75fr)!important;align-items:center!important;gap:18px!important;margin:0!important}
-#page-home .welcome-sports{justify-content:flex-end!important;gap:12px!important}
-
-/* Accesos: cuatro columnas reales en escritorio */
-#page-home .quick-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin:0!important}
-#page-home .quick-action{width:100%!important;min-height:165px!important;height:auto!important;padding:16px!important;display:flex!important;flex-direction:column!important;justify-content:space-between!important}
-
-/* Parte inferior llena el ancho en dos columnas balanceadas */
-#page-home .home-lower{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr)!important;gap:14px!important;margin:0!important;align-items:stretch!important}
-#page-home .home-lower>*{width:100%!important;max-width:none!important;min-width:0!important;margin:0!important}
-#page-home .home-card{height:100%!important}
-
-/* sidebar acompaña el scroll */
-.sidebar{position:absolute!important;top:0!important;bottom:auto!important;height:auto!important;min-height:100vh!important;max-height:none!important;overflow:visible!important}
-
-/* controles fluidos */
-:where(button,.quick-action,.top-select,.drive-pill,.home-card,.panel,.builder,.sidecard){min-width:0!important;max-width:100%!important}
-:where(button,.quick-action,.top-select,.drive-pill){white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.15!important}
-.games{grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))!important}
-
-@media(max-width:1100px){
-  #page-home .home-top{grid-template-columns:1fr!important}
-  #page-home .home-top-controls{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #page-home .welcome-card{grid-template-columns:1fr!important;min-height:130px!important;padding:18px!important}
-  #page-home .welcome-sports{display:none!important}
-  #page-home .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #page-home .home-lower{grid-template-columns:1fr!important}
+#page-home .exact-home,
+#page-home .exact-topbar,
+#page-home .exact-layout,
+#page-home .exact-center,
+#page-home .exact-hero,
+#page-home .exact-actions,
+#page-home .exact-lower,
+#page-home .exact-footer{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
 }
-@media(max-width:720px){
-  #page-home .home-shell{padding:10px!important}
-  #page-home .home-top-controls{grid-template-columns:1fr!important}
-  #page-home .quick-actions{grid-template-columns:1fr!important}
-  #page-home .quick-action{min-height:120px!important}
-  #page-home .welcome-card h1{font-size:clamp(1.6rem,9vw,2.3rem)!important}
-  #page-home .welcome-card h2{font-size:clamp(1rem,5.5vw,1.35rem)!important}
+
+/* Quitar por completo la columna derecha y recuperar ese espacio */
+#page-home .exact-right,
+#page-home .exact-lifeline,
+#page-home .exact-tip{
+  display:none!important;
+}
+#page-home .exact-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:0!important;
+}
+#page-home .exact-center{
+  grid-column:1!important;
+}
+
+/* Encabezado */
+#page-home .exact-topbar{
+  display:grid!important;
+  grid-template-columns:minmax(220px,.8fr) minmax(560px,1.7fr)!important;
+  align-items:center!important;
+  gap:16px!important;
+}
+#page-home .exact-brand{
+  width:auto!important;
+  max-width:260px!important;
+  min-width:0!important;
+}
+#page-home .exact-top-controls{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:1.1fr 1.1fr 1fr .62fr!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+#page-home .header-select,
+#page-home .drive-connected,
+#page-home .profile-btn{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  white-space:normal!important;
+}
+
+/* Hero, ahora ocupa todo el hueco que quedó libre */
+#page-home .exact-hero{
+  min-height:176px!important;
+  height:auto!important;
+  padding:24px 34px!important;
+  display:grid!important;
+  grid-template-columns:minmax(300px,1.25fr) minmax(300px,.75fr)!important;
+  align-items:center!important;
+  gap:20px!important;
+}
+#page-home .hero-illustration{
+  width:100%!important;
+  justify-content:flex-end!important;
+  padding:8px 10px!important;
+}
+
+/* Cuatro accesos distribuidos de extremo a extremo */
+#page-home .exact-actions{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:14px!important;
+  margin-top:14px!important;
+}
+#page-home .action-card{
+  width:100%!important;
+  min-width:0!important;
+  min-height:174px!important;
+  height:auto!important;
+}
+
+/* Parte inferior equilibrada */
+#page-home .exact-lower{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.25fr) minmax(0,.95fr)!important;
+  gap:14px!important;
+  margin-top:14px!important;
+  align-items:stretch!important;
+}
+#page-home .exact-lower>.exact-card{
+  width:100%!important;
+  max-width:none!important;
+  height:100%!important;
+  min-width:0!important;
+}
+
+/* Footer ocupa todo el ancho */
+#page-home .exact-footer{
+  margin-top:14px!important;
+  display:grid!important;
+  grid-template-columns:auto auto auto minmax(180px,1fr) auto!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+
+/* Sidebar acompaña el scroll */
+.sidebar{
+  position:absolute!important;
+  top:0!important;
+  bottom:auto!important;
+  height:auto!important;
+  min-height:100vh!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+
+/* Texto y controles nunca deben desbordar */
+#page-home button,
+#page-home strong,
+#page-home b,
+#page-home p,
+#page-home h1,
+#page-home h2,
+#page-home h3{
+  min-width:0!important;
+  overflow-wrap:break-word!important;
+}
+
+@media(max-width:1120px){
+  #page-home .exact-topbar{grid-template-columns:1fr!important}
+  #page-home .exact-brand{max-width:230px!important}
+  #page-home .exact-top-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #page-home .exact-hero{grid-template-columns:1fr!important;min-height:135px!important;padding:20px!important}
+  #page-home .hero-illustration{display:none!important}
+  #page-home .exact-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #page-home .exact-lower{grid-template-columns:1fr!important}
+}
+
+@media(max-width:680px){
+  #page-home .exact-home{padding-left:8px!important;padding-right:8px!important}
+  #page-home .exact-top-controls{grid-template-columns:1fr!important}
+  #page-home .exact-actions{grid-template-columns:1fr!important}
+  #page-home .action-card{min-height:125px!important}
+  #page-home .exact-footer{grid-template-columns:auto auto 1fr!important}
+  #page-home .exact-footer p{grid-column:1/-1!important}
+  #page-home .footer-ok{grid-column:1/-1!important}
 }
