@@ -1,50 +1,8 @@
 (()=>{
-const palettes=[
- {skin:'#f3b27a',skin2:'#d98f55',hair:'#3b2418',shirt:'#2f80ed',shorts:'#184d8b',shoe:'#ffffff',accent:'#ff7a21'},
- {skin:'#c98257',skin2:'#a86443',hair:'#1f1714',shirt:'#18a76f',shorts:'#13684b',shoe:'#f8fafc',accent:'#ffb020'},
- {skin:'#f6c08b',skin2:'#d99a65',hair:'#2d1c16',shirt:'#7a5cff',shorts:'#4937a5',shoe:'#ffffff',accent:'#ff5d74'},
- {skin:'#8f5c3e',skin2:'#70442f',hair:'#17120f',shirt:'#ff884d',shorts:'#9d4b25',shoe:'#f7f7f7',accent:'#41c7d9'}
-];
-const equipment=['ball','cone','hoop','two','target','zigzag'];
-function child(x,y,p,flip=1,pose=0){
- const arm1=pose%3===0?`M${x-9*flip},${y+24} Q${x-24*flip},${y+32} ${x-31*flip},${y+44}`:`M${x-9*flip},${y+24} Q${x-21*flip},${y+17} ${x-28*flip},${y+10}`;
- const arm2=pose%2===0?`M${x+9*flip},${y+24} Q${x+22*flip},${y+29} ${x+30*flip},${y+39}`:`M${x+9*flip},${y+24} Q${x+20*flip},${y+16} ${x+26*flip},${y+8}`;
- const leg1=pose%3===1?`M${x-7},${y+53} Q${x-17},${y+66} ${x-26},${y+74}`:`M${x-7},${y+53} L${x-15},${y+75}`;
- const leg2=pose%3===2?`M${x+7},${y+53} Q${x+18},${y+61} ${x+29},${y+67}`:`M${x+7},${y+53} L${x+16},${y+75}`;
- return `<g class="kid" filter="url(#soft)">
- <ellipse cx="${x}" cy="${y+77}" rx="27" ry="5" fill="#17385a" opacity=".22"/>
- <path d="${leg1}" stroke="${p.skin2}" stroke-width="7" stroke-linecap="round"/><path d="${leg2}" stroke="${p.skin2}" stroke-width="7" stroke-linecap="round"/>
- <path d="${leg1}" stroke="${p.shorts}" stroke-width="12" stroke-linecap="round" stroke-dasharray="18 80"/><path d="${leg2}" stroke="${p.shorts}" stroke-width="12" stroke-linecap="round" stroke-dasharray="18 80"/>
- <path d="M${x-19},${y+76} q12 5 24 0" stroke="${p.shoe}" stroke-width="7" stroke-linecap="round"/><path d="M${x+7},${y+76} q12 5 24 0" stroke="${p.shoe}" stroke-width="7" stroke-linecap="round"/>
- <rect x="${x-15}" y="${y+20}" width="30" height="38" rx="13" fill="${p.shirt}"/><path d="M${x-12},${y+43} q12 7 24 0" stroke="#fff" opacity=".25" stroke-width="3" fill="none"/>
- <path d="${arm1}" stroke="${p.skin}" stroke-width="8" stroke-linecap="round"/><path d="${arm2}" stroke="${p.skin}" stroke-width="8" stroke-linecap="round"/>
- <circle cx="${x}" cy="${y+5}" r="17" fill="${p.skin}"/>
- <path d="M${x-16},${y+3} q2-18 17-18 q13 1 17 15 q-8-7-16-5 q-9 3-18 0z" fill="${p.hair}"/>
- <circle cx="${x-6}" cy="${y+5}" r="1.7" fill="#2b1e18"/><circle cx="${x+6}" cy="${y+5}" r="1.7" fill="#2b1e18"/>
- <path d="M${x-5},${y+12} q5 4 10 0" stroke="#9d573f" stroke-width="1.8" fill="none" stroke-linecap="round"/>
- <circle cx="${x-18}" cy="${y+6}" r="3" fill="${p.skin}"/><circle cx="${x+18}" cy="${y+6}" r="3" fill="${p.skin}"/>
- </g>`;
-}
-function gear(type,i){
- if(type==='two') return `<circle cx="150" cy="74" r="12" fill="#ff8a1c" stroke="#fff" stroke-width="3"/><circle cx="210" cy="60" r="11" fill="#38bdf8" stroke="#fff" stroke-width="3"/>`;
- if(type==='hoop') return `<ellipse cx="212" cy="92" rx="34" ry="11" fill="none" stroke="#ff6a00" stroke-width="6"/><ellipse cx="212" cy="92" rx="25" ry="7" fill="none" stroke="#ffc38e" stroke-width="2"/>`;
- if(type==='target') return `<g transform="translate(205 48)"><circle r="31" fill="#fff" stroke="#d9e6f2" stroke-width="3"/><circle r="23" fill="#ff6b35"/><circle r="15" fill="#fff"/><circle r="7" fill="#ff6b35"/></g>`;
- if(type==='zigzag') return `<g>${[0,1,2].map((n)=>`<path d="M${190+n*22},104 l8-18 8 18z" fill="${['#ff6b00','#ff9b36','#ffcf57'][n]}"/>`).join('')}</g>`;
- return `<g><circle cx="207" cy="68" r="13" fill="${i%2?'#38bdf8':'#ff8a1c'}" stroke="#fff" stroke-width="3"/><path d="M197 68 q10-9 20 0 q-10 9-20 0" stroke="#ffffffaa" stroke-width="2" fill="none"/></g>`;
-}
-function scene(card,i){
- const title=(card.querySelector('.game-top')?.innerText||'').toLowerCase();
- let type=equipment[i%equipment.length];
- if(/aro|círculo/.test(title)) type='hoop'; else if(/blanco|objetivo|punter/.test(title)) type='target'; else if(/cono|camino|zigzag|circuito/.test(title)) type='zigzag'; else if(/pareja|equipo|dupla|pase/.test(title)) type='two';
- const p1=palettes[i%palettes.length],p2=palettes[(i+1)%palettes.length];
- const two=type==='two'||/pareja|equipo|dupla/.test(title);
- return `<svg viewBox="0 0 300 130" role="img" aria-label="Ilustración del juego"><defs><linearGradient id="bg${i}" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dff3ff"/><stop offset="1" stop-color="#f8fcff"/></linearGradient><filter id="soft"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-opacity=".18"/></filter></defs><rect width="300" height="130" rx="16" fill="url(#bg${i})"/><path d="M0 102 Q75 92 150 101 T300 98 V130 H0z" fill="#d8eee4"/><path d="M0 108 Q75 99 150 107 T300 104" stroke="#b7d6cb" stroke-width="2" fill="none"/>${child(two?92:110,34,p1,1,i)}${two?child(202,36,p2,-1,i+1):''}${gear(type,i)}<g opacity=".35"><circle cx="264" cy="24" r="18" fill="#fff"/><path d="M24 22 h42" stroke="#fff" stroke-width="7" stroke-linecap="round"/></g></svg>`;
-}
-function enhance(root=document){
- const cards=[...root.querySelectorAll('.game')];
- cards.forEach((card,i)=>{const s=card.querySelector('.scene');if(!s||s.dataset.enhanced==='1')return;s.innerHTML=scene(card,i);s.dataset.enhanced='1';});
-}
-let t;const obs=new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>enhance(),60)});
-function init(){enhance();obs.observe(document.body,{childList:true,subtree:true});}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
+const P=[['#ffd0a0','#6b351e','#1688ff','#123e8a','#fff'],['#b86d46','#2b1711','#ff4f86','#7b2fa4','#fff'],['#f1b77f','#522716','#20b86b','#176f4b','#fff'],['#8d5137','#17100d','#ff9c22','#9c4f12','#fff']];
+function kid(x,y,p,pose=0,flip=1){const [skin,hair,shirt,shorts,shoe]=p;const run=pose%3;return `<g transform="translate(${x} ${y}) scale(${flip} 1)" filter="url(#sh)"><ellipse cy="73" rx="28" ry="5" fill="#07569b" opacity=".16"/><path d="M-9 45 Q${run===1?-24:-13} 59 ${run===1?-31:-18} 70M9 45 Q${run===2?25:14} 57 ${run===2?32:19} 69" fill="none" stroke="${skin}" stroke-width="9" stroke-linecap="round"/><path d="M-10 43 Q${run===1?-20:-12} 51 ${run===1?-24:-15} 56M10 43 Q${run===2?21:13} 50 ${run===2?25:16} 55" fill="none" stroke="${shorts}" stroke-width="13" stroke-linecap="round"/><path d="M-31 70q12 7 22 0M9 69q12 7 22 0" fill="none" stroke="${shoe}" stroke-width="8" stroke-linecap="round"/><path d="M-12 20 Q${run===0?-27:-23} ${run===0?9:30} ${run===0?-34:-31} ${run===0?2:39}M12 20 Q${run===2?29:25} ${run===2?7:28} ${run===2?36:32} ${run===2?1:36}" fill="none" stroke="${skin}" stroke-width="9" stroke-linecap="round"/><rect x="-17" y="15" width="34" height="34" rx="14" fill="${shirt}"/><path d="M-13 34q13 7 26 0" stroke="#fff" opacity=".28" stroke-width="3" fill="none"/><circle cy="0" r="19" fill="${skin}"/><path d="M-18-2q1-20 18-21 17 1 20 18-9-8-18-5-10 3-20-1z" fill="${hair}"/><path d="M-17-8q7-12 14-12M-6-17q8-8 15-4M6-17q8-3 13 4" stroke="${hair}" stroke-width="5" stroke-linecap="round"/><ellipse cx="-7" cy="1" rx="2.2" ry="2.8" fill="#263238"/><ellipse cx="7" cy="1" rx="2.2" ry="2.8" fill="#263238"/><circle cx="-6.3" cy=".2" r=".7" fill="#fff"/><circle cx="7.7" cy=".2" r=".7" fill="#fff"/><path d="M-6 9q6 7 12 0" fill="#fff" stroke="#9e543e" stroke-width="1.5"/><circle cx="-13" cy="7" r="3" fill="#ef8c82" opacity=".45"/><circle cx="13" cy="7" r="3" fill="#ef8c82" opacity=".45"/></g>`}
+function ball(x,y){return `<g transform="translate(${x} ${y})"><circle r="15" fill="#f47721" stroke="#c64b0a" stroke-width="2"/><path d="M-15 0h30M0-15q-9 15 0 30M0-15q9 15 0 30" fill="none" stroke="#8d3509" stroke-width="1.8"/></g>`}
+function cone(x,y){return `<path d="M${x} ${y}l10-25 10 25z" fill="#ff6b00"/><rect x="${x-4}" y="${y}" width="28" height="5" rx="2" fill="#d95000"/>`}
+function hoop(x,y){return `<ellipse cx="${x}" cy="${y}" rx="25" ry="9" fill="none" stroke="#ff4e70" stroke-width="5"/><ellipse cx="${x}" cy="${y}" rx="18" ry="5" fill="none" stroke="#fff" stroke-width="2"/>`}
+function scene(card,i){const t=(card.querySelector('.game-top')?.innerText||'').toLowerCase();const pair=/pareja|pase|equipo|dupla|grupo/.test(t),shoot=/tiro|aro|lanz|blanco/.test(t),slalom=/cono|slalom|zigzag|circuito|camino/.test(t);let action='';if(shoot)action=`${kid(103,45,P[i%4],2)}${ball(160,31)}<g transform="translate(222 30)"><rect width="48" height="35" rx="3" fill="#fff" stroke="#1766a5" stroke-width="4"/><ellipse cx="24" cy="37" rx="19" ry="6" fill="none" stroke="#f05a24" stroke-width="4"/><path d="M9 40l7 23m23-23-7 23" stroke="#fff" stroke-width="2"/></g>`;else if(pair)action=`${kid(83,45,P[i%4],0)}${kid(218,45,P[(i+1)%4],0,-1)}${ball(150,62)}${cone(139,111)}`;else if(slalom)action=`${kid(92,44,P[i%4],1)}${ball(151,88)}${cone(185,112)}${cone(229,108)}${cone(263,112)}`;else action=`${kid(88,44,P[i%4],1)}${kid(205,46,P[(i+2)%4],2)}${hoop(145,105)}${cone(249,110)}`;return `<svg viewBox="0 0 300 135" aria-label="Ilustración infantil del juego"><defs><linearGradient id="sky${i}" x2="0" y2="1"><stop stop-color="#bcecff"/><stop offset="1" stop-color="#f8fdff"/></linearGradient><filter id="sh"><feDropShadow dy="2" stdDeviation="1.5" flood-opacity=".2"/></filter></defs><rect width="300" height="135" rx="15" fill="url(#sky${i})"/><circle cx="257" cy="24" r="17" fill="#fff7b2" opacity=".9"/><path d="M0 72Q40 52 80 69t80 0t80 0t60-4v70H0z" fill="#8edb83" opacity=".7"/><rect y="93" width="300" height="42" fill="#4bb6df"/><path d="M0 113h300M32 94v41M268 94v41" stroke="#dff8ff" stroke-width="2" opacity=".75"/>${action}</svg>`}
+function enhance(){document.querySelectorAll('.game').forEach((c,i)=>{const s=c.querySelector('.scene');if(s){s.innerHTML=scene(c,i);s.dataset.enhanced='2'}})}let timer;new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(enhance,80)}).observe(document.documentElement,{childList:true,subtree:true});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',enhance);else enhance();})();
