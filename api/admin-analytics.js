@@ -11,25 +11,27 @@ export default async function handler(req,res){
   const until=new Date();
   const since=new Date(until.getTime()-days*86400000);
   async function query(path,extra={}){
-    const p=new URLSearchParams({projectId,since:since.toISOString(),until:until.toISOString(),...extra});
+    const p=new URLSearchParams({projectId,since:since.toISOString(),until:until.toISOString()});
     if(teamId)p.set('teamId',teamId);
+    Object.entries(extra).forEach(([k,v])=>{if(Array.isArray(v))v.forEach(x=>p.append(k,x));else if(v!==undefined&&v!==null)p.set(k,String(v))});
     const r=await fetch('https://api.vercel.com'+path+'?'+p.toString(),{headers:{Authorization:`Bearer ${process.env.VERCEL_TOKEN}`}});
-    if(!r.ok)throw new Error('analytics_'+r.status);
+    if(!r.ok){let detail='';try{detail=await r.text()}catch{};console.error('ProfeGo analytics error',r.status,path,detail.slice(0,500));throw new Error('analytics_'+r.status)}
     return r.json();
   }
   try{
-    const [visits,plans,sessions,minutes,groups,contents,sections,users]=await Promise.all([
-      query('/v1/query/web-analytics/visits/count'),
-      query('/v1/query/web-analytics/events/count',{filter:"eventName eq 'planning_created'"}),
-      query('/v1/query/web-analytics/events/count',{filter:"eventName eq 'session_start'"}),
-      query('/v1/query/web-analytics/events/count',{filter:"eventName eq 'usage_minute'"}),
-      query('/v1/query/web-analytics/events/aggregate',{by:'eventData/group',filter:"eventName eq 'planning_created'",limit:'20'}),
-      query('/v1/query/web-analytics/events/aggregate',{by:'eventData/content',filter:"eventName eq 'planning_created'",limit:'30'}),
-      query('/v1/query/web-analytics/events/aggregate',{by:'eventData/section',filter:"eventName eq 'section_view'",limit:'20'}),
-      query('/v1/query/web-analytics/events/aggregate',{by:'eventData/user',filter:"eventName eq 'session_start'",limit:'100'})
+    const visits=await query('/v1/query/web-analytics/visits/count');
+    const safe=async(path,extra)=>{try{return await query(path,extra)}catch(e){console.warn('Optional analytics query failed',path,e.message);return {data:[]}}};
+    const [plans,sessions,minutes,groups,contents,sections,users]=await Promise.all([
+      safe('/v1/query/web-analytics/events/count',{filter:"eventName eq 'planning_created'"}),
+      safe('/v1/query/web-analytics/events/count',{filter:"eventName eq 'session_start'"}),
+      safe('/v1/query/web-analytics/events/count',{filter:"eventName eq 'usage_minute'"}),
+      safe('/v1/query/web-analytics/events/aggregate',{by:['eventData/group'],filter:"eventName eq 'planning_created'",limit:20}),
+      safe('/v1/query/web-analytics/events/aggregate',{by:['eventData/content'],filter:"eventName eq 'planning_created'",limit:30}),
+      safe('/v1/query/web-analytics/events/aggregate',{by:['eventData/section'],filter:"eventName eq 'section_view'",limit:20}),
+      safe('/v1/query/web-analytics/events/aggregate',{by:['eventData/user'],filter:"eventName eq 'session_start'",limit:100})
     ]);
     const n=x=>Number(x?.data?.pageviews??x?.data?.events??x?.data?.count??0);
-    const visitors=Number(visits?.data?.visitors||0), usage=n(minutes), planCount=n(plans);
-    res.status(200).json({range:{days,since,until},summary:{pageviews:n(visits),users:visitors,sessions:n(sessions),plans:planCount,usageMinutes:usage,avgMinutesPerUser:visitors?Math.round(usage/visitors*10)/10:0,plansPerUser:visitors?Math.round(planCount/visitors*100)/100:0},groups:groups.data||[],contents:contents.data||[],sections:sections.data||[],users:users.data||[]});
+    const visitors=Number(visits?.data?.visitors||0),usage=n(minutes),planCount=n(plans);
+    res.status(200).json({range:{days,since,until},summary:{pageviews:n(visits),users:visitors,sessions:n(sessions),plans:planCount,usageMinutes:usage,avgMinutesPerUser:visitors?Math.round(usage/visitors*10)/10:0,plansPerUser:visitors?Math.round(planCount/visitors*100)/100:0},groups:Array.isArray(groups.data)?groups.data:[],contents:Array.isArray(contents.data)?contents.data:[],sections:Array.isArray(sections.data)?sections.data:[],users:Array.isArray(users.data)?users.data:[]});
   }catch(e){res.status(502).json({error:'analytics_query_failed',message:e.message})}
 }
