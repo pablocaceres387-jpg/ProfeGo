@@ -1,0 +1,4 @@
+(()=>{
+function install(){const old=document.getElementById('count');if(!old||old.dataset.freeCount)return;const input=document.createElement('input');input.id='count';input.type='number';input.min='1';input.step='1';input.value=old.value||10;input.dataset.freeCount='1';input.setAttribute('inputmode','numeric');input.setAttribute('aria-label','Cantidad de clases');input.oninput=()=>{let n=parseInt(input.value,10);if(!Number.isFinite(n)||n<1)return;const meta=document.getElementById('meta');if(meta)meta.textContent=n+' clases'};old.replaceWith(input);const label=input.closest('.box')?.querySelector('label');if(label)label.textContent='Cantidad de clases';}
+let n=0;const t=setInterval(()=>{n++;install();if(document.querySelector('#count[data-free-count]')||n>30)clearInterval(t)},100);
+})();
