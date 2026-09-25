@@ -12,7 +12,30 @@ function legacy(){try{return JSON.parse(localStorage.getItem('profego-ai-history
 function allHistory(){return [...legacy(),...history()].slice(-240)}
 function saveHistory(games){try{const entries=games.filter(Boolean).map(g=>({name:g.name||'',signature:signature(g)}));localStorage.setItem('profego-ai-history-v2',JSON.stringify([...history(),...entries].slice(-240)))}catch{}}
 function materials(){try{return JSON.parse(localStorage.getItem('profego-resources')||'[]').map(x=>x.name||x.nombre||x).filter(Boolean).slice(0,30)}catch{return[]}}
-function icon(){const s=val('sport');return {'Básquetbol':'🏀','Fútbol':'⚽','Handball':'🤾','Vóley':'🏐','Deportes con raqueta':'🎾'}[s]||'🏃'}
+function visual(g,i){
+ const t=normalize((g?.name||'')+' '+(g?.description||''));
+ let pose='🏃',label='Movimiento';
+ if(/basquet|dribl|pique|botar/.test(t))pose='⛹️';
+ else if(/futbol|pate|gol|pelota con.*pie/.test(t))pose='⚽';
+ else if(/voley|volei|saque|remate/.test(t))pose='🏐';
+ else if(/handball|lanz|pase|recib/.test(t))pose='🤾';
+ else if(/aro|salto|saltar/.test(t))pose='🦘';
+ else if(/equilibr|banco|linea/.test(t))pose='🤸';
+ else if(/persec|atrap|correr|carrera|relevo/.test(t))pose='🏃';
+ else if(/cooper|equipo|pareja/.test(t))pose='🧒🧒';
+ else if(/relaj|calma|estir/.test(t))pose='🧘';
+ else if(/raqueta|tenis/.test(t))pose='🎾';
+ const kid=['🧒🏻','👧🏻','🧒🏼'][i%3];
+ return `<div class="pg-visual"><span class="pg-kid">${kid}</span><span class="pg-action">${pose}</span><span class="pg-ground"></span></div>`;
+}
+function ensureVisualStyles(){
+ if(document.getElementById('pg-ai-visual-styles'))return;
+ const s=document.createElement('style');s.id='pg-ai-visual-styles';s.textContent=`
+ .game{overflow:hidden}.pg-visual{height:128px;margin:8px 10px 10px;border-radius:18px;background:linear-gradient(145deg,#f2f8ff,#fff7ef);position:relative;display:flex;align-items:center;justify-content:center;gap:8px;font-size:55px;box-shadow:inset 0 0 0 1px rgba(20,80,140,.08)}
+ .pg-kid{filter:drop-shadow(0 5px 4px rgba(0,0,0,.12));transform:rotate(-5deg)}.pg-action{font-size:48px;filter:drop-shadow(0 4px 3px rgba(0,0,0,.1))}.pg-ground{position:absolute;bottom:15px;width:68%;height:7px;border-radius:50%;background:rgba(30,110,180,.12)}
+ @media(max-width:700px){.pg-visual{height:112px;font-size:49px}.pg-action{font-size:43px}}
+ `;document.head.appendChild(s);
+}
 function duplicates(plan){
  const old=allHistory(), seen=[];
  const bad=[];
@@ -24,12 +47,13 @@ function duplicates(plan){
  return bad;
 }
 function render(plan){
+ ensureVisualStyles();
  const group=val('group'),sport=val('sport');
  document.getElementById('meta').textContent=`${plan.classes.length} clases · IA`;
  document.getElementById('sideGoal').textContent=val('goal');
  document.getElementById('classes').innerHTML=plan.classes.map((cl,ci)=>{
    const games=(cl.games||[]).slice(0,6);
-   return `<div class="classbox"><div class="class-title">CLASE ${ci+1} · ${esc(cl.stage||'Desarrollo')} · ${esc(group)}${sport?' · '+esc(sport):''}</div><div style="padding:10px 12px;font-size:12px;font-weight:700;color:#1677ff">Meta: ${esc(cl.goal||'')}</div><div class="games">${games.map((g,i)=>`<article class="game" data-sport="${esc(sport)}"><h4>${i+1} · ${esc(g.name)}</h4><div class="scene">${icon()}</div><p>${esc(g.description)}</p><div class="actions"><button onclick="suggest(this,${ci+1},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`).join('')}</div></div>`
+   return `<div class="classbox"><div class="class-title">CLASE ${ci+1} · ${esc(cl.stage||'Desarrollo')} · ${esc(group)}${sport?' · '+esc(sport):''}</div><div style="padding:10px 12px;font-size:12px;font-weight:700;color:#1677ff">Meta: ${esc(cl.goal||'')}</div><div class="games">${games.map((g,i)=>`<article class="game" data-sport="${esc(sport)}"><h4>${i+1} · ${esc(g.name)}</h4>${visual(g,i)}<p>${esc(g.description)}</p><div class="actions"><button onclick="suggest(this,${ci+1},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`).join('')}</div></div>`
  }).join('');
  saveHistory(plan.classes.flatMap(c=>c.games||[]));
 }
