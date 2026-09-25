@@ -2,9 +2,9 @@ export default async function handler(req,res){
   if(req.method!=='POST') return res.status(405).json({error:'Método no permitido'});
   if(!process.env.OPENAI_API_KEY) return res.status(503).json({error:'IA_NO_CONFIGURADA'});
   try{
-    const {group,content,sport,goal,count=10,materials=[],avoid=[]}=req.body||{};
+    const {group,content,sport,goal,count=10,materials=[],avoid=[],avoidSignatures=[],retry=false,rejected=[]}=req.body||{};
     const n=Math.max(1,Math.min(12,Number(count)||10));
-    const excluded=(Array.isArray(avoid)?avoid:[]).slice(-120).join(' | ');
+    const excluded=(Array.isArray(avoid)?avoid:[]).slice(-160).join(' | ');\n    const semanticExcluded=(Array.isArray(avoidSignatures)?avoidSignatures:[]).slice(-100).join(' || ');\n    const rejectedNow=(Array.isArray(rejected)?rejected:[]).join(' | ');
     const nonce=Math.random().toString(36).slice(2)+Date.now().toString(36);
     const prompt=`Sos la IA pedagógica de ProfeGo, una app para docentes de Educación Física.
 Generá una secuencia NUEVA y VARIADA de ${n} clases para:
@@ -21,7 +21,7 @@ Reglas obligatorias:
 - Evitá ejercicios eliminatorios y tiempos largos de espera.
 - La meta de cada clase se redacta con el patrón: "Los niños realizarán [acción] para [objetivo]".
 - No repitas nombres ni propuestas dentro de esta secuencia.
-- Evitá especialmente estas actividades ya usadas por este usuario: ${excluded||'ninguna registrada'}.
+- Evitá especialmente estas actividades ya usadas por este usuario: ${excluded||'ninguna registrada'}.\n- También evitá propuestas semánticamente parecidas a este historial: ${semanticExcluded||'ninguno'}.\n- No alcanza con cambiar el nombre: si la dinámica, organización, objetivo y reglas son casi iguales, considerala repetida y creá otra distinta.\n- ${retry?'SEGUNDO INTENTO: la app detectó similitud. Rehacé la secuencia con dinámicas claramente diferentes.':'Primera generación.'}\n- Actividades rechazadas por similitud en el intento anterior: ${rejectedNow||'ninguna'}.
 - Inventá variantes nuevas aunque el usuario vuelva a pedir los mismos parámetros.
 - Respondé SOLO JSON válido, sin markdown ni comentarios.
 - Formato exacto:
