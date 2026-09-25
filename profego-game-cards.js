@@ -13,23 +13,25 @@ style.textContent=`
 `;
 document.head.appendChild(style);
 
-function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
-function svgFor(name){const n=hash(name||'juego')%8;const common=`<svg viewBox="0 0 320 150" aria-hidden="true"><defs><linearGradient id="g${n}" x2="0" y2="1"><stop stop-color="#c9efff"/><stop offset="1" stop-color="#f8fdff"/></linearGradient></defs><rect width="320" height="150" fill="url(#g${n})"/><rect y="96" width="320" height="54" fill="#efc77c"/><path d="M0 118H320" stroke="#fff7df" stroke-width="2"/>`;
-const kid=(x,y,c)=>`<g transform="translate(${x} ${y})"><circle cy="-24" r="12" fill="#f2bb86"/><rect x="-11" y="-10" width="22" height="29" rx="8" fill="${c}"/><path d="M-7 18l-10 19M7 18l12 18M-9-3l-15 14M9-3l17 10" stroke="#f2bb86" stroke-width="6" stroke-linecap="round"/><path d="M-17 37h10M17 36h10" stroke="#fff" stroke-width="6" stroke-linecap="round"/></g>`;
-const ball=(x,y,c='#f58220')=>`<circle cx="${x}" cy="${y}" r="10" fill="${c}" stroke="#9b4b11" stroke-width="2"/>`;
-const cone=(x,y)=>`<path d="M${x-8} ${y}h16l-5-22h-6z" fill="#ff6b19"/>`;
-let body='';
-if(n===0)body=`${kid(70,82,'#2287ef')}${kid(155,82,'#ef4f88')}${kid(245,82,'#20b86b')}${cone(115,130)}${cone(205,130)}`;
-if(n===1)body=`${kid(90,82,'#8554ee')}${kid(230,82,'#20b86b')}${ball(160,63)}<path d="M160 56Q160 34 185 36" stroke="#1d73b8" stroke-width="3" fill="none"/>`;
-if(n===2)body=`${kid(85,82,'#ff9621')}${ball(145,116)}${cone(185,131)}${cone(225,131)}${cone(265,131)}`;
-if(n===3)body=`${kid(90,82,'#2287ef')}${kid(220,82,'#ef4f88')}${ball(155,112,'#fff')}<rect x="145" y="60" width="20" height="48" fill="none" stroke="#fff" stroke-width="3"/>`;
-if(n===4)body=`${kid(62,82,'#20b86b')}${kid(128,82,'#2287ef')}${kid(194,82,'#ff9621')}${kid(260,82,'#8554ee')}${ball(160,114)}`;
-if(n===5)body=`${kid(78,82,'#ef4f88')}${kid(160,82,'#2287ef')}${kid(242,82,'#20b86b')}<ellipse cx="78" cy="127" rx="24" ry="7" fill="none" stroke="#2c8cff" stroke-width="5"/><ellipse cx="160" cy="127" rx="24" ry="7" fill="none" stroke="#ff4f88" stroke-width="5"/><ellipse cx="242" cy="127" rx="24" ry="7" fill="none" stroke="#20b86b" stroke-width="5"/>`;
-if(n===6)body=`${kid(80,82,'#2287ef')}${kid(240,82,'#ff9621')}<path d="M160 52v70" stroke="#fff" stroke-width="4"/><path d="M126 66h68" stroke="#3b78a8" stroke-width="3"/>${ball(160,48,'#fff')}`;
-if(n===7)body=`${kid(105,82,'#8554ee')}${kid(215,82,'#20b86b')}<path d="M130 124q30-42 60 0" fill="none" stroke="#ef4f88" stroke-width="6"/>${cone(60,131)}${cone(270,131)}`;
-return common+body+'</svg>'}
+function norm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function activityType(name,desc=''){const t=norm(name+' '+desc);if(/dribl|pique|botar|basquet/.test(t))return'dribble';if(/pase|recib/.test(t))return'pass';if(/lanz|aro|encest/.test(t))return'throw';if(/salto|saltar|valla/.test(t))return'jump';if(/equilibr|linea|banco/.test(t))return'balance';if(/persec|atrap|carrera|relevo|correr/.test(t))return'run';if(/futbol|pate|gol/.test(t))return'football';if(/voley|volei|saque|remate/.test(t))return'volley';if(/cooper|pareja|equipo|espejo/.test(t))return'pair';if(/estatua|postura|cuerpo|corporal/.test(t))return'body';if(/calma|relaj|estir/.test(t))return'calm';return'move'}
+function kid(x,y,c='#2788ed',girl=false,flip=false){return `<g transform="translate(${x} ${y}) scale(${flip?-1:1} 1)"><ellipse cy="43" rx="25" ry="5" fill="#234" opacity=".12"/><circle cy="-31" r="18" fill="#f1b37d"/>${girl?'<path d="M-17-39q17-19 34 1v10q-17-11-34 0z" fill="#71391f"/><circle cx="19" cy="-39" r="8" fill="#71391f"/>':'<path d="M-17-39q5-18 13-7q8-14 13 1q10-8 9 9q-17-8-35 2z" fill="#71391f"/>'}<circle cx="-6" cy="-31" r="2.3" fill="#2d241f"/><circle cx="6" cy="-31" r="2.3" fill="#2d241f"/><path d="M-5-23q5 5 10 0" stroke="#a85548" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="-16" y="-10" width="32" height="35" rx="12" fill="white" stroke="${c}" stroke-width="4"/><path d="M-10 24l-13 24M10 24l15 23M-13-4l-19 14M13-4l20 12" stroke="#f1b37d" stroke-width="8" stroke-linecap="round"/><path d="M-25 49h15M20 48h15" stroke="${c}" stroke-width="8" stroke-linecap="round"/></g>`}
+function svgFor(name,desc){const type=activityType(name,desc),ball=(x,y,c='#ef7d18')=>`<circle cx="${x}" cy="${y}" r="13" fill="${c}" stroke="#93480d" stroke-width="2"/>`,cone=(x,y)=>`<path d="M${x-10} ${y}h20l-6-27h-8z" fill="#ff6b19"/>`,hoop=(x,y,c)=>`<ellipse cx="${x}" cy="${y}" rx="30" ry="9" fill="none" stroke="${c}" stroke-width="6"/>`;let b='';
+if(type==='dribble')b=kid(115,92,'#20a06b')+ball(190,120)+cone(235,141)+cone(280,141);
+else if(type==='pass')b=kid(85,92,'#2788ed')+kid(245,92,'#ed4e88',true,true)+ball(165,92);
+else if(type==='throw')b=kid(105,92,'#20a06b')+ball(188,50)+'<rect x="246" y="35" width="46" height="29" rx="3" fill="#fff" stroke="#e44" stroke-width="3"/><path d="M269 64v39" stroke="#555" stroke-width="4"/><path d="M255 65q14 25 28 0" fill="none" stroke="#ddd" stroke-width="3"/>';
+else if(type==='jump')b=kid(130,72,'#ed4e88',true)+hoop(90,139,'#2d8cf0')+hoop(165,139,'#f04e88')+hoop(240,139,'#25b56d');
+else if(type==='balance')b=kid(160,73,'#2788ed')+'<rect x="70" y="127" width="180" height="10" rx="5" fill="#a86b35"/>';
+else if(type==='run')b=kid(72,92,'#2788ed')+kid(165,92,'#ed4e88',true)+kid(258,92,'#20a06b')+cone(120,141)+cone(215,141);
+else if(type==='football')b=kid(120,92,'#2788ed')+ball(200,130,'#fff')+cone(255,141);
+else if(type==='volley')b=kid(75,92,'#ed4e88',true)+kid(255,92,'#2788ed',false,true)+'<path d="M165 48v90" stroke="#526b7a" stroke-width="4"/><path d="M100 70h130" stroke="#526b7a" stroke-width="3"/>'+ball(165,43,'#fff');
+else if(type==='pair')b=kid(95,92,'#2788ed')+kid(235,92,'#ed4e88',true,true)+'<path d="M125 55q40-25 80 0" fill="none" stroke="#7c4ce0" stroke-width="3" stroke-dasharray="6 5"/>';
+else if(type==='body')b=kid(75,92,'#2788ed')+kid(165,92,'#ed4e88',true)+kid(255,92,'#20a06b');
+else if(type==='calm')b=kid(160,99,'#20a06b')+'<rect x="92" y="135" width="136" height="9" rx="5" fill="#4da8ef"/>';
+else b=kid(75,92,'#2788ed')+kid(165,92,'#ed4e88',true)+kid(255,92,'#20a06b');
+return `<svg viewBox="0 0 330 155" aria-hidden="true"><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#dff4ff"/><stop offset="1" stop-color="#fff8ef"/></linearGradient></defs><rect width="330" height="155" fill="url(#sky)"/><rect y="112" width="330" height="43" fill="#edc77d"/><path d="M0 136H330" stroke="#fff7df" stroke-width="3"/>${b}</svg>`}
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
-function renderCard(card,index){if(!card)return;card.dataset.gameNumber=String(index+1);const scene=card.querySelector('.scene');if(scene)scene.innerHTML=svgFor(gameName(card));const h=card.querySelector('h4');if(h){const name=gameName(card);h.textContent=name}}
+function renderCard(card,index){if(!card)return;card.dataset.gameNumber=String(index+1);const scene=card.querySelector('.scene');if(scene)scene.innerHTML=svgFor(gameName(card),card.querySelector('p')?.textContent||'');const h=card.querySelector('h4');if(h){const name=gameName(card);h.textContent=name}}
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
 let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(renderAll,35)}).observe(classes,{childList:true,subtree:true})}
 document.addEventListener('click',e=>{const btn=e.target.closest?.('.game .actions button');if(!btn)return;const text=(btn.textContent||'').toLowerCase();if(text.includes('sugerir'))setTimeout(()=>{const card=btn.closest('.game');const box=card?.closest('.classbox');const idx=box?[...box.querySelectorAll('.game')].indexOf(card):0;renderCard(card,Math.max(0,idx))},30);if(text.includes('elegir'))setTimeout(renderAll,80)},true);
