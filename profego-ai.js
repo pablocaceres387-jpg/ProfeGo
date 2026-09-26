@@ -53,7 +53,7 @@ function render(plan){
  document.getElementById('sideGoal').textContent=val('goal');
  document.getElementById('classes').innerHTML=plan.classes.map((cl,ci)=>{
    const games=(cl.games||[]).slice(0,6);
-   return `<div class="classbox"><div class="class-title">CLASE ${ci+1} · ${esc(cl.stage||'Desarrollo')} · ${esc(group)}${sport?' · '+esc(sport):''}</div><div style="padding:10px 12px;font-size:12px;font-weight:700;color:#1677ff">Meta: ${esc(cl.goal||'')}</div><div class="games">${games.map((g,i)=>`<article class="game" data-sport="${esc(sport)}"><h4>${i+1} · ${esc(g.name)}</h4>${visual(g,i)}<p>${esc(g.description)}</p><div class="actions"><button onclick="suggest(this,${ci+1},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`).join('')}</div></div>`
+   return `<div class="classbox"><div class="class-title">CLASE ${ci+1} · ${esc(cl.stage||'Desarrollo')} · ${esc(group)}${sport?' · '+esc(sport):''}</div><div style="padding:10px 12px;font-size:12px;font-weight:700;color:#1677ff">Meta: ${esc(cl.goal||'')}</div><div class="games">${games.map((g,i)=>`<article class="game" data-sport="${esc(sport)}"><h4>${i+1} · ${esc(g.name)}</h4><div class="scene">${visual(g,i)}</div><p>${esc(g.description)}</p><div class="actions"><button onclick="suggest(this,${ci+1},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`).join('')}</div></div>`
  }).join('');
  saveHistory(plan.classes.flatMap(c=>c.games||[]));
 }
