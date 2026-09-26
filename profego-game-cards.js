@@ -1,15 +1,15 @@
 (()=>{
 const style=document.createElement('style');
 style.textContent=`
-#classes .games{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;padding:12px!important}
+#classes .games{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;padding:12px!important}
 #classes .game{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden!important;position:relative!important}
-#classes .game .scene{order:1!important;height:108px!important;min-height:108px!important;position:static!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#eaf7ff!important}
+#classes .game .scene{order:1!important;height:150px!important;min-height:150px!important;position:static!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#eaf7ff!important}
 #classes .game .scene svg{width:100%!important;height:100%!important;display:block!important}
 #classes .game h4{order:2!important;margin:0!important;padding:9px 10px 4px!important;font-size:12px!important;line-height:1.3!important;background:var(--card)!important;position:static!important;color:var(--ink)!important;min-height:auto!important;z-index:auto!important}
 #classes .game p{order:3!important;margin:0!important;padding:5px 10px 9px!important;font-size:10.5px!important;line-height:1.4!important;min-height:58px!important;background:var(--card)!important;color:var(--muted)!important;position:static!important;overflow:visible!important}
 #classes .game .actions{order:4!important;padding:0 9px 9px!important;margin-top:auto!important;background:var(--card)!important}
 #classes .game::before{content:'JUEGO ' attr(data-game-number);display:block;order:0;padding:6px 10px;background:#0b4f9c;color:white;font-size:10px;font-weight:900;letter-spacing:.05em}
-@media(max-width:760px){#classes .games{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;padding:8px!important}#classes .game .scene{height:86px!important;min-height:86px!important}#classes .game h4{font-size:10.5px!important;padding:7px 7px 3px!important}#classes .game p{font-size:9.5px!important;padding:4px 7px 7px!important;min-height:66px!important}#classes .game .actions{grid-template-columns:1fr!important;padding:0 7px 7px!important}#classes .game .actions .choose{grid-column:auto!important}#classes .game::before{font-size:9px;padding:5px 7px}}
+@media(max-width:760px){#classes .games{grid-template-columns:1fr!important;gap:12px!important;padding:10px!important}#classes .game .scene{height:190px!important;min-height:190px!important}#classes .game h4{font-size:10.5px!important;padding:7px 7px 3px!important}#classes .game p{font-size:9.5px!important;padding:4px 7px 7px!important;min-height:66px!important}#classes .game .actions{grid-template-columns:1fr!important;padding:0 7px 7px!important}#classes .game .actions .choose{grid-column:auto!important}#classes .game::before{font-size:9px;padding:5px 7px}}
 `;
 document.head.appendChild(style);
 
