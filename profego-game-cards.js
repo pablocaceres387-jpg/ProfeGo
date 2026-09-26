@@ -32,6 +32,20 @@ else b=kid(75,92,'#2788ed')+kid(165,92,'#ed4e88',true)+kid(255,92,'#20a06b');
 return `<svg viewBox="0 0 330 155" aria-hidden="true"><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#dff4ff"/><stop offset="1" stop-color="#fff8ef"/></linearGradient></defs><rect width="330" height="155" fill="url(#sky)"/><rect y="112" width="330" height="43" fill="#edc77d"/><path d="M0 136H330" stroke="#fff7df" stroke-width="3"/>${b}</svg>`}
 window.__pgFallback=(n,d)=>svgFor(n,d);
 function photoFor(name,desc){const t=norm(name+' '+desc),base='https://raw.githubusercontent.com/pablocaceres387-jpg/ProfeGo/main/assets/activities/';if(/espejo/.test(t))return base+'mirror.webp';if(/estatua/.test(t))return base+'statues.webp';if(/detective|parte del cuerpo|corporal/.test(t))return base+'body.webp';if(/grande|pequeno|pequeño/.test(t))return base+'bigsmall.webp';return''}
+const aiQueue=[];let aiBusy=0;
+function imageKey(name,desc){return 'pgimg:'+norm(name).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function openImageDB(){return new Promise((ok,no)=>{const q=indexedDB.open('profego-images',1);q.onupgradeneeded=()=>q.result.createObjectStore('images');q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)})}
+async function cachedImage(key){try{const db=await openImageDB();return await new Promise(ok=>{const tx=db.transaction('images','readonly'),r=tx.objectStore('images').get(key);r.onsuccess=()=>ok(r.result||'');r.onerror=()=>ok('')})}catch{return''}}
+async function saveImage(key,value){try{const db=await openImageDB();await new Promise(ok=>{const tx=db.transaction('images','readwrite');tx.objectStore('images').put(value,key);tx.oncomplete=ok;tx.onerror=ok})}catch{}}
+function enqueueImage(job){aiQueue.push(job);pumpImages()}
+function pumpImages(){while(aiBusy<2&&aiQueue.length){aiBusy++;const j=aiQueue.shift();j().finally(()=>{aiBusy--;pumpImages()})}}
+async function generateImage(name,desc,key,scene){
+ const old=await cachedImage(key);if(old){setSceneImage(scene,old,name);return}
+ try{const r=await fetch('/api/generate-game-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,description:desc})});const d=await r.json();if(!r.ok||!d.image)throw new Error(d.detail||'image');await saveImage(key,d.image);setSceneImage(scene,d.image,name)}
+ catch(e){scene.innerHTML='<div style="padding:22px;text-align:center;color:#52708e;font-weight:800">Imagen en preparación</div>'}
+}
+function setSceneImage(scene,src,name){if(!scene?.isConnected)return;scene.innerHTML='';const im=document.createElement('img');im.src=src;im.alt=name;im.style.cssText='width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff';scene.appendChild(im)}
+const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;imageObserver.unobserve(e.target);const s=e.target,n=s.dataset.pgName||'',d=s.dataset.pgDesc||'',k=s.dataset.pgKey||'';if(n&&k)enqueueImage(()=>generateImage(n,d,k,s))}),{rootMargin:'500px 0px'});
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
 function renderCard(card,index){if(!card)return;card.dataset.gameNumber=String(index+1);const scene=card.querySelector('.scene');if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',p=photoFor(n,d);scene.innerHTML=p?`<img src="${p}" alt="${n}" loading="eager" onerror="this.outerHTML=window.__pgFallback?window.__pgFallback('${n.replace(/'/g,'')}','${d.replace(/'/g,'')}'):''" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff">`:svgFor(n,d)}const h=card.querySelector('h4');if(h){const name=gameName(card);h.textContent=name}}
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
