@@ -48,7 +48,17 @@ async function generateImage(name,desc,key,scene){
 function setSceneImage(scene,src,name){if(!scene?.isConnected)return;scene.innerHTML='';const im=document.createElement('img');im.src=src;im.alt=name;im.style.cssText='width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff';scene.appendChild(im)}
 const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;imageObserver.unobserve(e.target);const s=e.target,n=s.dataset.pgName||'',d=s.dataset.pgDesc||'',k=s.dataset.pgKey||'';if(n&&k)enqueueImage(()=>generateImage(n,d,k,s),k)}),{rootMargin:'500px 0px'});
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
-function renderCard(card,index){if(!card)return;card.dataset.gameNumber=String(index+1);const scene=card.querySelector('.scene');if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',p=photoFor(n,d);scene.innerHTML=p?`<img src="${p}" alt="${n}" loading="eager" onerror="this.outerHTML=window.__pgFallback?window.__pgFallback('${n.replace(/'/g,'')}','${d.replace(/'/g,'')}'):''" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff">`:svgFor(n,d)}const h=card.querySelector('h4');if(h){const name=gameName(card);h.textContent=name}}
+function renderCard(card,index){
+ if(!card)return;card.dataset.gameNumber=String(index+1);
+ const scene=card.querySelector('.scene');
+ if(scene){
+  const n=gameName(card),d=card.querySelector('p')?.textContent||'',k=imageKey(n,d);
+  scene.dataset.pgName=n;scene.dataset.pgDesc=d;scene.dataset.pgKey=k;
+  scene.innerHTML='<div style="display:flex;align-items:center;justify-content:center;gap:8px;height:100%;color:#52708e;font-weight:800"><span>✨</span><span>Creando ilustración…</span></div>';
+  imageObserver.observe(scene)
+ }
+ const h=card.querySelector('h4');if(h)h.textContent=gameName(card)
+}
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
 function removeLegacyVisuals(){document.querySelectorAll('#classes .game .scene').forEach(s=>{const im=s.querySelector('img');if(im&&(/raw\.githubusercontent\.com/.test(im.src)||/assets\/activities/.test(im.src))){s.innerHTML='';const card=s.closest('.game'),n=gameName(card),d=card?.querySelector('p')?.textContent||'',k=imageKey(n,d);s.dataset.pgName=n;s.dataset.pgDesc=d;s.dataset.pgKey=k;imageObserver.observe(s)}})}
 let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(renderAll,35)}).observe(classes,{childList:true,subtree:true})}
