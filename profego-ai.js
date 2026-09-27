@@ -10,7 +10,12 @@ function similarity(a,b){const A=words(a),B=words(b);if(!A.size||!B.size)return 
 function signature(g){return normalize((g?.name||'')+' '+(g?.description||''))}
 function history(){try{return JSON.parse(localStorage.getItem('profego-ai-history-v2')||'[]')}catch{return[]}}
 function legacy(){try{return JSON.parse(localStorage.getItem('profego-ai-history')||'[]').map(x=>({name:x,signature:normalize(x)}))}catch{return[]}}
-function allHistory(){return [...legacy(),...history()].slice(-240)}
+function allHistory(){return [...legacy(),...history()].slice(-600)}
+function recentNames(){return allHistory().map(x=>x.name).filter(Boolean).slice(-300)}
+function exactRepeated(plan){
+ const old=new Set(recentNames().map(normalize));
+ return (plan.classes||[]).flatMap(c=>c.games||[]).filter(g=>old.has(normalize(g.name))).map(g=>g.name)
+}
 function shufflePlan(plan){
  (plan.classes||[]).forEach(cl=>{for(let i=(cl.games||[]).length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cl.games[i],cl.games[j]]=[cl.games[j],cl.games[i]]}});
  return plan
@@ -73,9 +78,10 @@ async function aiGenerate(){
  if(btn){btn.disabled=true;btn.textContent='✨ Creando con IA...'}
  if(status){status.textContent='✨ ProfeGo IA está creando una planificación diferente...';status.className='status'}
  try{
-   const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:allHistory().map(x=>x.name).filter(Boolean),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
-   let data=await requestPlan(base), bad=duplicates(data);
-   if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad});bad=duplicates(data)}
+   const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:recentNames(),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
+   let data=await requestPlan(base), bad=[...new Set([...duplicates(data),...exactRepeated(data)])];
+   if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad,avoid:recentNames()});bad=[...new Set([...duplicates(data),...exactRepeated(data)])]}
+   if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad,avoid:[...recentNames(),...bad]})}
    data=shufflePlan(data);
    const fp=planFingerprint(data);
    if(fp===lastPlanSignatures){data=await requestPlan({...base,retry:true,rejected:(data.classes||[]).flatMap(c=>c.games||[]).map(g=>g.name)});data=shufflePlan(data)}
