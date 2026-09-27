@@ -4,7 +4,9 @@ export default async function handler(req,res){
   try{
     const {group,content,sport,goal,count=10,materials=[],avoid=[],avoidSignatures=[],retry=false,rejected=[],sessionSeed=''}=req.body||{};
     const n=Math.max(1,Math.min(12,Number(count)||10));
-    const excluded=(Array.isArray(avoid)?avoid:[]).slice(-160).join(' | ');\n    const semanticExcluded=(Array.isArray(avoidSignatures)?avoidSignatures:[]).slice(-100).join(' || ');\n    const rejectedNow=(Array.isArray(rejected)?rejected:[]).join(' | ');
+    const excluded=(Array.isArray(avoid)?avoid:[]).slice(-160).join(' | ');
+    const semanticExcluded=(Array.isArray(avoidSignatures)?avoidSignatures:[]).slice(-100).join(' || ');
+    const rejectedNow=(Array.isArray(rejected)?rejected:[]).join(' | ');
     const nonce=Math.random().toString(36).slice(2)+Date.now().toString(36);
     const prompt=`Sos la IA pedagógica de ProfeGo, una app para docentes de Educación Física.
 Generá una secuencia NUEVA y VARIADA de ${n} clases para:
