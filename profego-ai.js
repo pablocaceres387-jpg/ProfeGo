@@ -67,7 +67,7 @@ async function requestPlan(body){
  if(!r.ok){if(data.error==='IA_NO_CONFIGURADA')throw new Error('IA_NO_CONFIGURADA');throw new Error(data.error||'Error')}
  return data;
 }
-window.generate=async function(){
+async function aiGenerate(){
  const status=document.getElementById('generateStatus');
  const btn=document.querySelector('#new .setup button.save');
  if(btn){btn.disabled=true;btn.textContent='✨ Creando con IA...'}
@@ -92,4 +92,7 @@ window.generate=async function(){
    }catch(_){if(originalGenerate)originalGenerate()}
  }finally{if(btn){btn.disabled=false;btn.textContent='Generar planificación'}}
 };
+window.__profegoAIGenerate=aiGenerate;
+window.generate=aiGenerate;
+setTimeout(()=>{window.generate=aiGenerate},0);
 })();
