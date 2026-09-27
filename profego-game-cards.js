@@ -50,13 +50,26 @@ const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
 function realPhotoFor(name,desc){
  const t=activityType(name,desc);
- const q={run:'running,training',jump:'jumping,fitness',balance:'balance,exercise',pass:'ball,training',throw:'basketball,training',dribble:'basketball,dribbling',football:'soccer,training',volley:'volleyball,training',pair:'teamwork,sport',body:'fitness,exercise',calm:'stretching,fitness',move:'physical,training'}[t]||'physical,training';
- return 'https://source.unsplash.com/900x600/?'+encodeURIComponent(q)
+ const photos={
+  run:'https://images.pexels.com/photos/296302/pexels-photo-296302.jpeg?auto=compress&cs=tinysrgb&w=900',
+  jump:'https://images.pexels.com/photos/8613312/pexels-photo-8613312.jpeg?auto=compress&cs=tinysrgb&w=900',
+  balance:'https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=900',
+  pass:'https://images.pexels.com/photos/296301/pexels-photo-296301.jpeg?auto=compress&cs=tinysrgb&w=900',
+  throw:'https://images.pexels.com/photos/1752757/pexels-photo-1752757.jpeg?auto=compress&cs=tinysrgb&w=900',
+  dribble:'https://images.pexels.com/photos/1752757/pexels-photo-1752757.jpeg?auto=compress&cs=tinysrgb&w=900',
+  football:'https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=900',
+  volley:'https://images.pexels.com/photos/6203521/pexels-photo-6203521.jpeg?auto=compress&cs=tinysrgb&w=900',
+  pair:'https://images.pexels.com/photos/296302/pexels-photo-296302.jpeg?auto=compress&cs=tinysrgb&w=900',
+  body:'https://images.pexels.com/photos/8613312/pexels-photo-8613312.jpeg?auto=compress&cs=tinysrgb&w=900',
+  calm:'https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=900',
+  move:'https://images.pexels.com/photos/296302/pexels-photo-296302.jpeg?auto=compress&cs=tinysrgb&w=900'
+ };
+ return photos[t]||photos.move
 }
 function renderCard(card,index){
  if(!card)return;card.dataset.gameNumber=String(index+1);
  const scene=card.querySelector('.scene');
- if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',src=realPhotoFor(n,d);scene.innerHTML='<img src="'+src+'" alt="'+n.replace(/"/g,'')+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">';}
+ if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',src=realPhotoFor(n,d);scene.innerHTML='<img src="'+src+'" alt="'+n.replace(/"/g,'')+'" loading="eager" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block" onerror="this.onerror=null;this.src=\'https://images.pexels.com/photos/296302/pexels-photo-296302.jpeg?auto=compress&cs=tinysrgb&w=900\'">';}
  const h=card.querySelector('h4');if(h)h.textContent=gameName(card)
 }
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
