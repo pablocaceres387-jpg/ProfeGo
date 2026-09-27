@@ -2,7 +2,7 @@ export default async function handler(req,res){
   if(req.method!=='POST') return res.status(405).json({error:'Método no permitido'});
   if(!process.env.OPENAI_API_KEY) return res.status(503).json({error:'IA_NO_CONFIGURADA'});
   try{
-    const {group,content,sport,goal,count=10,materials=[],avoid=[],avoidSignatures=[],retry=false,rejected=[]}=req.body||{};
+    const {group,content,sport,goal,count=10,materials=[],avoid=[],avoidSignatures=[],retry=false,rejected=[],sessionSeed=''}=req.body||{};
     const n=Math.max(1,Math.min(12,Number(count)||10));
     const excluded=(Array.isArray(avoid)?avoid:[]).slice(-160).join(' | ');\n    const semanticExcluded=(Array.isArray(avoidSignatures)?avoidSignatures:[]).slice(-100).join(' || ');\n    const rejectedNow=(Array.isArray(rejected)?rejected:[]).join(' | ');
     const nonce=Math.random().toString(36).slice(2)+Date.now().toString(36);
@@ -26,7 +26,7 @@ Reglas obligatorias:
 - Respondé SOLO JSON válido, sin markdown ni comentarios.
 - Formato exacto:
 {"classes":[{"number":1,"stage":"Exploración","goal":"Los niños realizarán ... para ...","games":[{"name":"Nombre breve","description":"Explicación clara de cómo se juega, organización y variante."}]}]}
-Identificador de variación: ${nonce}`;
+Identificador de variación irrepetible: ${nonce}-${sessionSeed}\n- Elegí al azar enfoques, organizaciones y consignas distintas en cada pedido. Si los parámetros son iguales, NO reutilices la secuencia anterior.`;
     const r=await fetch('https://api.openai.com/v1/responses',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${process.env.OPENAI_API_KEY}`},
