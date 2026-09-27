@@ -69,7 +69,7 @@ function realPhotoFor(name,desc){
 function renderCard(card,index){
  if(!card)return;card.dataset.gameNumber=String(index+1);
  const scene=card.querySelector('.scene');
- if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',src=realPhotoFor(n,d);scene.innerHTML='<img src="'+src+'" alt="'+n.replace(/"/g,'')+'" loading="eager" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block" onerror="this.onerror=null;this.src=\'https://images.pexels.com/photos/296302/pexels-photo-296302.jpeg?auto=compress&cs=tinysrgb&w=900\'">';}
+ if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'';scene.innerHTML=svgFor(n,d)}
  const h=card.querySelector('h4');if(h)h.textContent=gameName(card)
 }
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
@@ -78,3 +78,4 @@ let timer=0;const classes=document.getElementById('classes');if(classes){new Mut
 document.addEventListener('click',e=>{const btn=e.target.closest?.('.game .actions button');if(!btn)return;const text=(btn.textContent||'').toLowerCase();if(text.includes('sugerir'))setTimeout(()=>{const card=btn.closest('.game');const box=card?.closest('.classbox');const idx=box?[...box.querySelectorAll('.game')].indexOf(card):0;renderCard(card,Math.max(0,idx))},30);if(text.includes('elegir'))setTimeout(renderAll,80)},true);
 renderAll();
 })();
+;(()=>{const s=document.createElement('style');s.id='pg-scroll-lock';s.textContent='html,body{max-width:100%;overflow-x:hidden!important}#classes,.classbox,.games{max-width:100%;overflow-x:hidden!important}.game{min-width:0!important;max-width:100%!important}.scene{overflow:hidden!important}';document.head.appendChild(s)})();
