@@ -67,7 +67,7 @@ window.generate=async function(){
  if(btn){btn.disabled=true;btn.textContent='✨ Creando con IA...'}
  if(status){status.textContent='✨ ProfeGo IA está creando una planificación diferente...';status.className='status'}
  try{
-   const base={group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:allHistory().map(x=>x.name).filter(Boolean),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
+   const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:allHistory().map(x=>x.name).filter(Boolean),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
    let data=await requestPlan(base), bad=duplicates(data);
    if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad});bad=duplicates(data)}
    render(data);
