@@ -41,16 +41,17 @@ const queuedKeys=new Set();
 function enqueueImage(job,key){if(queuedKeys.has(key))return;queuedKeys.add(key);aiQueue.push(async()=>{try{await job()}finally{queuedKeys.delete(key)}});pumpImages()}
 function pumpImages(){while(aiBusy<2&&aiQueue.length){aiBusy++;const j=aiQueue.shift();j().finally(()=>{aiBusy--;pumpImages()})}}
 async function generateImage(name,desc,key,scene){
- const old=await cachedImage(key);if(old){setSceneImage(scene,old,name);return}
+ const old=await cachedImage(key);if(old&&old.startsWith('data:image/')){setSceneImage(scene,old,name);return}
  try{const r=await fetch('/api/generate-game-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,description:desc})});const d=await r.json();if(!r.ok||!d.image)throw new Error(d.detail||'image');await saveImage(key,d.image);setSceneImage(scene,d.image,name)}
- catch(e){scene.innerHTML='<div style="padding:22px;text-align:center;color:#52708e;font-weight:800">Imagen en preparación</div>'}
+ catch(e){scene.innerHTML='<div style="padding:22px;text-align:center;color:#52708e;font-weight:800">✨ Preparando ilustración 3D…</div>'}
 }
 function setSceneImage(scene,src,name){if(!scene?.isConnected)return;scene.innerHTML='';const im=document.createElement('img');im.src=src;im.alt=name;im.style.cssText='width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff';scene.appendChild(im)}
 const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;imageObserver.unobserve(e.target);const s=e.target,n=s.dataset.pgName||'',d=s.dataset.pgDesc||'',k=s.dataset.pgKey||'';if(n&&k)enqueueImage(()=>generateImage(n,d,k,s),k)}),{rootMargin:'500px 0px'});
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
 function renderCard(card,index){if(!card)return;card.dataset.gameNumber=String(index+1);const scene=card.querySelector('.scene');if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',p=photoFor(n,d);scene.innerHTML=p?`<img src="${p}" alt="${n}" loading="eager" onerror="this.outerHTML=window.__pgFallback?window.__pgFallback('${n.replace(/'/g,'')}','${d.replace(/'/g,'')}'):''" style="width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff">`:svgFor(n,d)}const h=card.querySelector('h4');if(h){const name=gameName(card);h.textContent=name}}
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
+function removeLegacyVisuals(){document.querySelectorAll('#classes .game .scene').forEach(s=>{const im=s.querySelector('img');if(im&&(/raw\.githubusercontent\.com/.test(im.src)||/assets\/activities/.test(im.src))){s.innerHTML='';const card=s.closest('.game'),n=gameName(card),d=card?.querySelector('p')?.textContent||'',k=imageKey(n,d);s.dataset.pgName=n;s.dataset.pgDesc=d;s.dataset.pgKey=k;imageObserver.observe(s)}})}
 let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(renderAll,35)}).observe(classes,{childList:true,subtree:true})}
 document.addEventListener('click',e=>{const btn=e.target.closest?.('.game .actions button');if(!btn)return;const text=(btn.textContent||'').toLowerCase();if(text.includes('sugerir'))setTimeout(()=>{const card=btn.closest('.game');const box=card?.closest('.classbox');const idx=box?[...box.querySelectorAll('.game')].indexOf(card):0;renderCard(card,Math.max(0,idx))},30);if(text.includes('elegir'))setTimeout(renderAll,80)},true);
-renderAll();
+renderAll();setTimeout(removeLegacyVisuals,100);
 })();
