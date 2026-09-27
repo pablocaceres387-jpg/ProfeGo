@@ -33,7 +33,7 @@ return `<svg viewBox="0 0 330 155" aria-hidden="true"><defs><linearGradient id="
 window.__pgFallback=(n,d)=>svgFor(n,d);
 function photoFor(name,desc){const t=norm(name+' '+desc),base='https://raw.githubusercontent.com/pablocaceres387-jpg/ProfeGo/main/assets/activities/';if(/espejo/.test(t))return base+'mirror.webp';if(/estatua/.test(t))return base+'statues.webp';if(/detective|parte del cuerpo|corporal/.test(t))return base+'body.webp';if(/grande|pequeno|pequeño/.test(t))return base+'bigsmall.webp';return''}
 const aiQueue=[];let aiBusy=0;
-function imageKey(name,desc){const a=norm(name).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),b=norm(desc).replace(/[^a-z0-9]+/g,' ').trim().split(/\s+/).slice(0,10).join('-');return 'pgimg:v2:'+a+':'+b}
+function imageKey(name,desc){const a=norm(name).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),b=norm(desc).replace(/[^a-z0-9]+/g,' ').trim().split(/\s+/).slice(0,10).join('-');return 'pgimg:v3-2d:'+a+':'+b}
 function openImageDB(){return new Promise((ok,no)=>{const q=indexedDB.open('profego-images',1);q.onupgradeneeded=()=>q.result.createObjectStore('images');q.onsuccess=()=>ok(q.result);q.onerror=()=>no(q.error)})}
 async function cachedImage(key){try{const db=await openImageDB();return await new Promise(ok=>{const tx=db.transaction('images','readonly'),r=tx.objectStore('images').get(key);r.onsuccess=()=>ok(r.result||'');r.onerror=()=>ok('')})}catch{return''}}
 async function saveImage(key,value){try{const db=await openImageDB();await new Promise(ok=>{const tx=db.transaction('images','readwrite');tx.objectStore('images').put(value,key);tx.oncomplete=ok;tx.onerror=ok})}catch{}}
@@ -43,7 +43,7 @@ function pumpImages(){while(aiBusy<2&&aiQueue.length){aiBusy++;const j=aiQueue.s
 async function generateImage(name,desc,key,scene){
  const old=await cachedImage(key);if(old&&old.startsWith('data:image/')){setSceneImage(scene,old,name);return}
  try{const r=await fetch('/api/generate-game-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,description:desc})});const d=await r.json();if(!r.ok||!d.image)throw new Error(d.detail||'image');await saveImage(key,d.image);setSceneImage(scene,d.image,name)}
- catch(e){scene.innerHTML='<div style="padding:22px;text-align:center;color:#52708e;font-weight:800">✨ Preparando ilustración 3D…</div>'}
+ catch(e){scene.innerHTML='<div style="padding:22px;text-align:center;color:#52708e;font-weight:800">✨ Preparando ilustración…</div>'}
 }
 function setSceneImage(scene,src,name){if(!scene?.isConnected)return;scene.innerHTML='';const im=document.createElement('img');im.src=src;im.alt=name;im.style.cssText='width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff';scene.appendChild(im)}
 const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;imageObserver.unobserve(e.target);const s=e.target,n=s.dataset.pgName||'',d=s.dataset.pgDesc||'',k=s.dataset.pgKey||'';if(n&&k)enqueueImage(()=>generateImage(n,d,k,s),k)}),{rootMargin:'500px 0px'});
