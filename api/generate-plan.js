@@ -24,6 +24,10 @@ Reglas obligatorias:
 - La meta de cada clase se redacta con el patrón: "Los niños realizarán [acción] para [objetivo]".
 - No repitas nombres ni propuestas dentro de esta secuencia.
 - Evitá especialmente estas actividades ya usadas por este usuario: ${excluded||'ninguna registrada'}.\n- También evitá propuestas semánticamente parecidas a este historial: ${semanticExcluded||'ninguno'}.\n- No alcanza con cambiar el nombre: si la dinámica, organización, objetivo y reglas son casi iguales, considerala repetida y creá otra distinta.\n- ${retry?'SEGUNDO INTENTO: la app detectó similitud. Rehacé la secuencia con dinámicas claramente diferentes.':'Primera generación.'}\n- Actividades rechazadas por similitud en el intento anterior: ${rejectedNow||'ninguna'}.
+- PROHIBIDO devolver cualquiera de los nombres incluidos en "actividades ya usadas" o "actividades rechazadas". No los reformules levemente: reemplazalos por otra dinámica.
+- La variedad debe ser de ACTIVIDADES, no solo de nombres. Cambiá organización, consigna, material, desplazamiento y desafío.
+- Conservá una progresión pedagógica: primeras clases exploratorias, luego dominio de habilidades, después combinaciones/aplicación y finalmente juego/evaluación.
+- Cada clase debe avanzar respecto a la anterior sin depender de repetir un mismo juego.
 - Inventá variantes nuevas aunque el usuario vuelva a pedir los mismos parámetros.
 - Respondé SOLO JSON válido, sin markdown ni comentarios.
 - Formato exacto:
