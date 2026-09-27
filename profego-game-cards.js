@@ -51,17 +51,12 @@ function gameName(card){return (card.querySelector('h4')?.textContent||'').repla
 function renderCard(card,index){
  if(!card)return;card.dataset.gameNumber=String(index+1);
  const scene=card.querySelector('.scene');
- if(scene){
-  const n=gameName(card),d=card.querySelector('p')?.textContent||'',k=imageKey(n,d);
-  scene.dataset.pgName=n;scene.dataset.pgDesc=d;scene.dataset.pgKey=k;
-  scene.innerHTML='<div style="display:flex;align-items:center;justify-content:center;gap:8px;height:100%;color:#52708e;font-weight:800"><span>✨</span><span>Creando ilustración…</span></div>';
-  imageObserver.observe(scene)
- }
+ if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'';scene.innerHTML=svgFor(n,d)}
  const h=card.querySelector('h4');if(h)h.textContent=gameName(card)
 }
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
 function removeLegacyVisuals(){document.querySelectorAll('#classes .game .scene').forEach(s=>{const im=s.querySelector('img');if(im&&(/raw\.githubusercontent\.com/.test(im.src)||/assets\/activities/.test(im.src))){s.innerHTML='';const card=s.closest('.game'),n=gameName(card),d=card?.querySelector('p')?.textContent||'',k=imageKey(n,d);s.dataset.pgName=n;s.dataset.pgDesc=d;s.dataset.pgKey=k;imageObserver.observe(s)}})}
 let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(renderAll,35)}).observe(classes,{childList:true,subtree:true})}
 document.addEventListener('click',e=>{const btn=e.target.closest?.('.game .actions button');if(!btn)return;const text=(btn.textContent||'').toLowerCase();if(text.includes('sugerir'))setTimeout(()=>{const card=btn.closest('.game');const box=card?.closest('.classbox');const idx=box?[...box.querySelectorAll('.game')].indexOf(card):0;renderCard(card,Math.max(0,idx))},30);if(text.includes('elegir'))setTimeout(renderAll,80)},true);
-renderAll();setTimeout(removeLegacyVisuals,100);
+renderAll();
 })();
