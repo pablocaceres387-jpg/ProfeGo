@@ -51,7 +51,7 @@ function gameName(card){return (card.querySelector('h4')?.textContent||'').repla
 function realPhotoFor(name,desc){
  const t=activityType(name,desc);
  const q={run:'running,training',jump:'jumping,fitness',balance:'balance,exercise',pass:'ball,training',throw:'basketball,training',dribble:'basketball,dribbling',football:'soccer,training',volley:'volleyball,training',pair:'teamwork,sport',body:'fitness,exercise',calm:'stretching,fitness',move:'physical,training'}[t]||'physical,training';
- return 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=900&q=80&sig='+encodeURIComponent(q)
+ return 'https://source.unsplash.com/900x600/?'+encodeURIComponent(q)
 }
 function renderCard(card,index){
  if(!card)return;card.dataset.gameNumber=String(index+1);
@@ -61,7 +61,7 @@ function renderCard(card,index){
 }
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
 function removeLegacyVisuals(){document.querySelectorAll('#classes .game .scene').forEach(s=>{const im=s.querySelector('img');if(im&&(/raw\.githubusercontent\.com/.test(im.src)||/assets\/activities/.test(im.src))){s.innerHTML='';const card=s.closest('.game'),n=gameName(card),d=card?.querySelector('p')?.textContent||'',k=imageKey(n,d);s.dataset.pgName=n;s.dataset.pgDesc=d;s.dataset.pgKey=k;imageObserver.observe(s)}})}
-let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(renderAll,35)}).observe(classes,{childList:true,subtree:true})}
+let timer=0;const classes=document.getElementById('classes');if(classes){new MutationObserver(ms=>{const structural=ms.some(m=>[...m.addedNodes,...m.removedNodes].some(n=>n.nodeType===1&&(n.matches?.('.game,.classbox')||n.querySelector?.('.game,.classbox'))));if(!structural)return;clearTimeout(timer);timer=setTimeout(renderAll,50)}).observe(classes,{childList:true,subtree:true})}
 document.addEventListener('click',e=>{const btn=e.target.closest?.('.game .actions button');if(!btn)return;const text=(btn.textContent||'').toLowerCase();if(text.includes('sugerir'))setTimeout(()=>{const card=btn.closest('.game');const box=card?.closest('.classbox');const idx=box?[...box.querySelectorAll('.game')].indexOf(card):0;renderCard(card,Math.max(0,idx))},30);if(text.includes('elegir'))setTimeout(renderAll,80)},true);
 renderAll();
 })();
