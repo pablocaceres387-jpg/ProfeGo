@@ -1,5 +1,6 @@
 (()=>{
 const originalGenerate=window.generate;
+let lastPlanSignatures=[];
 function val(id){return document.getElementById(id)?.value||''}
 function text(id){const e=document.getElementById(id);return e?.options?.[e.selectedIndex]?.text||e?.value||''}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -10,6 +11,11 @@ function signature(g){return normalize((g?.name||'')+' '+(g?.description||''))}
 function history(){try{return JSON.parse(localStorage.getItem('profego-ai-history-v2')||'[]')}catch{return[]}}
 function legacy(){try{return JSON.parse(localStorage.getItem('profego-ai-history')||'[]').map(x=>({name:x,signature:normalize(x)}))}catch{return[]}}
 function allHistory(){return [...legacy(),...history()].slice(-240)}
+function shufflePlan(plan){
+ (plan.classes||[]).forEach(cl=>{for(let i=(cl.games||[]).length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cl.games[i],cl.games[j]]=[cl.games[j],cl.games[i]]}});
+ return plan
+}
+function planFingerprint(plan){return (plan.classes||[]).flatMap(c=>c.games||[]).map(signature).join('|')}
 function saveHistory(games){try{const entries=games.filter(Boolean).map(g=>({name:g.name||'',signature:signature(g)}));localStorage.setItem('profego-ai-history-v2',JSON.stringify([...history(),...entries].slice(-240)))}catch{}}
 function materials(){try{return JSON.parse(localStorage.getItem('profego-resources')||'[]').map(x=>x.name||x.nombre||x).filter(Boolean).slice(0,30)}catch{return[]}}
 function visual(g,i){
@@ -70,12 +76,20 @@ window.generate=async function(){
    const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:allHistory().map(x=>x.name).filter(Boolean),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
    let data=await requestPlan(base), bad=duplicates(data);
    if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad});bad=duplicates(data)}
+   data=shufflePlan(data);
+   const fp=planFingerprint(data);
+   if(fp===lastPlanSignatures){data=await requestPlan({...base,retry:true,rejected:(data.classes||[]).flatMap(c=>c.games||[]).map(g=>g.name)});data=shufflePlan(data)}
+   lastPlanSignatures=planFingerprint(data);
    render(data);
    if(status){status.textContent=bad.length?'✓ Planificación generada con máxima variedad disponible':'✓ Planificación nueva verificada por ProfeGo IA';status.className='status'}
  }catch(e){
    console.warn('ProfeGo IA fallback',e);
    if(status)status.textContent=e.message==='IA_NO_CONFIGURADA'?'IA lista en la app: falta activar la clave del servidor. Usando generador actual por ahora.':'No se pudo conectar con la IA. Usando generador actual.';
-   if(originalGenerate)originalGenerate();
+   try{
+     const fallbackSeed=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random());
+     const retryData=await requestPlan({group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:allHistory().map(x=>x.name),avoidSignatures:allHistory().map(x=>x.signature),sessionSeed:fallbackSeed,retry:true});
+     render(shufflePlan(retryData));
+   }catch(_){if(originalGenerate)originalGenerate()}
  }finally{if(btn){btn.disabled=false;btn.textContent='Generar planificación'}}
 };
 })();
