@@ -48,10 +48,15 @@ async function generateImage(name,desc,key,scene){
 function setSceneImage(scene,src,name){if(!scene?.isConnected)return;scene.innerHTML='';const im=document.createElement('img');im.src=src;im.alt=name;im.style.cssText='width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:#eaf7ff';scene.appendChild(im)}
 const imageObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(!e.isIntersecting)return;imageObserver.unobserve(e.target);const s=e.target,n=s.dataset.pgName||'',d=s.dataset.pgDesc||'',k=s.dataset.pgKey||'';if(n&&k)enqueueImage(()=>generateImage(n,d,k,s),k)}),{rootMargin:'500px 0px'});
 function gameName(card){return (card.querySelector('h4')?.textContent||'').replace(/^\s*\d+\s*·\s*/,'').replace(/^Juego\s+\d+\s*·\s*/i,'').trim()}
+function realPhotoFor(name,desc){
+ const t=activityType(name,desc);
+ const q={run:'running,training',jump:'jumping,fitness',balance:'balance,exercise',pass:'ball,training',throw:'basketball,training',dribble:'basketball,dribbling',football:'soccer,training',volley:'volleyball,training',pair:'teamwork,sport',body:'fitness,exercise',calm:'stretching,fitness',move:'physical,training'}[t]||'physical,training';
+ return 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=900&q=80&sig='+encodeURIComponent(q)
+}
 function renderCard(card,index){
  if(!card)return;card.dataset.gameNumber=String(index+1);
  const scene=card.querySelector('.scene');
- if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'';scene.innerHTML=svgFor(n,d)}
+ if(scene){const n=gameName(card),d=card.querySelector('p')?.textContent||'',src=realPhotoFor(n,d);scene.innerHTML='<img src="'+src+'" alt="'+n.replace(/"/g,'')+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block">';}
  const h=card.querySelector('h4');if(h)h.textContent=gameName(card)
 }
 function renderAll(){document.querySelectorAll('#classes .classbox').forEach(box=>{box.querySelectorAll('.game').forEach((card,i)=>renderCard(card,i))})}
