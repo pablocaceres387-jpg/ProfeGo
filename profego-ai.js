@@ -3,6 +3,7 @@ const originalGenerate=window.generate;
 let lastPlanSignatures=[];
 function val(id){return document.getElementById(id)?.value||''}
 function text(id){const e=document.getElementById(id);return e?.options?.[e.selectedIndex]?.text||e?.value||''}
+function selectedSport(){return text('content').startsWith('Deporte ·')&&!/acuát|agua|aére|atletismo|patrimonio|convivencia/i.test(text('content'))?val('sport'):''}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function words(s){return new Set(normalize(s).split(' ').filter(w=>w.length>3))}
@@ -57,7 +58,7 @@ function duplicates(plan){
 }
 function render(plan){
  ensureVisualStyles();
- const group=val('group'),sport=val('sport');
+ const group=val('group'),sport=selectedSport();
  document.getElementById('meta').textContent=`${plan.classes.length} clases · IA`;
  document.getElementById('sideGoal').textContent=val('goal');
  document.getElementById('classes').innerHTML=plan.classes.map((cl,ci)=>{
@@ -78,7 +79,7 @@ async function aiGenerate(){
  if(btn){btn.disabled=true;btn.textContent='✨ Creando con IA...'}
  if(status){status.textContent='✨ ProfeGo IA está creando una planificación diferente...';status.className='status'}
  try{
-   const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:val('sport'),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:recentNames(),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
+   const base={sessionSeed:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),group:val('group'),content:text('content'),sport:selectedSport(),goal:val('goal'),count:+val('count')||10,materials:materials(),avoid:recentNames(),avoidSignatures:allHistory().map(x=>x.signature).filter(Boolean)};
    let data=await requestPlan(base), bad=[...new Set([...duplicates(data),...exactRepeated(data)])];
    if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad,avoid:recentNames()});bad=[...new Set([...duplicates(data),...exactRepeated(data)])]}
    if(bad.length){data=await requestPlan({...base,retry:true,rejected:bad,avoid:[...recentNames(),...bad]})}

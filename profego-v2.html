@@ -68,8 +68,736 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:
 <script>
 const categories=['Persecución','Roles y simbólicos','Cooperativos','Conciencia corporal','Orientación espacial','Manipulación','Equilibrio y gimnasia','Expresión y ritmo','Deporte','Atletismo','Vuelta a la calma'];
 const baseActivities=[['La mancha congelada','Persecución','Uno persigue. Cuando toca a alguien queda congelado hasta que un compañero lo libera pasando por debajo de sus brazos.','4 a 10 años'],['Mancha cadena','Persecución','Quien es tocado se une de la mano al perseguidor. La cadena crece hasta atrapar a todos.','5 a 12 años'],['Colores perseguidos','Persecución','El docente nombra un color; antes de ser tocados los niños deben llegar a un objeto de ese color.','3 a 8 años'],['Guardianes y tesoros','Persecución','Un grupo protege objetos en una zona y otro intenta tomarlos y volver a su campo sin ser tocado.','6 a 12 años'],['El lobo y las ovejas','Roles y simbólicos','Un niño es lobo y los demás ovejas. A la señal cruzan el espacio evitando ser atrapados. Se cambian roles.','3 a 7 años'],['Animales del bosque','Roles y simbólicos','Cada niño representa un animal con desplazamientos y sonidos. Cambian de rol según consignas.','3 a 6 años'],['Superhéroes al rescate','Roles y simbólicos','Resolver misiones motoras imaginarias: cruzar ríos, saltar lava, rescatar objetos y ayudar compañeros.','3 a 7 años'],['La ciudad imaginaria','Roles y simbólicos','El espacio se transforma en ciudad: calles, plazas, puentes y estaciones que se recorren con distintos roles.','4 a 8 años'],['Islas y caminos','Cooperativos','En pequeños grupos deben desplazarse usando aros o colchonetas como islas sin tocar el suelo exterior.','5 a 12 años'],['Transportar el tesoro','Cooperativos','Mover pelotas u objetos de una zona a otra sin usar las manos o cumpliendo una consigna grupal.','5 a 12 años'],['Nudo humano','Cooperativos','En ronda toman manos al azar y deben desarmar el nudo sin soltarse.','8 a 12 años'],['Puente colectivo','Cooperativos','El grupo debe construir un recorrido con materiales para que todos puedan cruzar.','6 a 12 años'],['Espejo corporal','Conciencia corporal','En parejas uno realiza movimientos lentos y el otro los imita como si fuera su reflejo.','3 a 12 años'],['Estatuas por partes','Conciencia corporal','Al detenerse la música deben adoptar posturas usando la parte del cuerpo indicada.','3 a 8 años'],['Detectives del cuerpo','Conciencia corporal','Responder consignas tocando, moviendo o apoyando partes del cuerpo en diferentes posiciones.','3 a 7 años'],['Grande-pequeño','Conciencia corporal','Variar posturas y desplazamientos haciéndose muy grande, pequeño, ancho, fino, alto o bajo.','3 a 7 años'],['Adentro y afuera','Orientación espacial','Moverse libremente y ubicarse dentro o fuera de aros, líneas o zonas según la señal.','3 a 7 años'],['Cerca-lejos','Orientación espacial','Desplazarse y ubicarse cerca o lejos de un objeto, compañero o docente según la consigna.','3 a 7 años'],['Mapa del tesoro','Orientación espacial','Seguir pistas espaciales: adelante, atrás, derecha, izquierda, debajo, entre y alrededor.','6 a 10 años'],['Circuito de direcciones','Orientación espacial','Recorrer estaciones con cambios de dirección, sentido, nivel y trayectoria.','5 a 12 años'],['Lluvia de pelotas','Manipulación','Lanzar y recibir pelotas variando altura, mano, distancia y tipo de pase.','5 a 12 años'],['Pases por puertas','Manipulación','En parejas pasar la pelota atravesando puertas formadas con conos, aumentando distancia.','6 a 12 años'],['Derribar torres','Manipulación','Lanzar pelotas para derribar conos o botellas desde diferentes distancias.','4 a 10 años'],['Pelota viajera','Manipulación','En ronda la pelota viaja con diferentes formas de pase y consignas de dirección o velocidad.','5 a 10 años'],['Camino de equilibrios','Equilibrio y gimnasia','Recorrer líneas, bancos bajos, colchonetas y apoyos manteniendo diferentes posiciones.','4 a 10 años'],['Giros y estatuas','Equilibrio y gimnasia','Realizar distintos giros y finalizar en una posición estable durante tres segundos.','4 a 10 años'],['Circuito gimnástico','Equilibrio y gimnasia','Combinar saltos, apoyos, rol adelante, equilibrio y trepas según posibilidades del grupo.','6 a 12 años'],['Saltos de río','Equilibrio y gimnasia','Saltar espacios marcados como ríos, variando distancia, dirección y forma de caída.','4 a 9 años'],['Semáforo musical','Expresión y ritmo','Moverse según la música: verde libre, amarillo lento, rojo estatua.','3 a 8 años'],['Ritmos del cuerpo','Expresión y ritmo','Crear secuencias con palmas, pasos, golpes suaves y movimientos corporales.','4 a 12 años'],['Danza espejo','Expresión y ritmo','En parejas crear e imitar secuencias breves al ritmo de la música.','5 a 12 años'],['Emociones en movimiento','Expresión y ritmo','Representar alegría, miedo, sorpresa, calma o enojo mediante postura y movimiento.','4 a 10 años'],['Mini básquet 3x3','Deporte','Juego reducido priorizando pases, desmarque, bote controlado y lanzamiento cercano.','8 a 12 años'],['Diez pases','Deporte','Dos equipos intentan completar diez pases sin que el rival intercepte.','7 a 12 años'],['Fútbol por puertas','Deporte','Marcar punto pasando la pelota entre dos conos hacia un compañero.','7 a 12 años'],['Handball zonas','Deporte','Progresar con pases y conseguir punto recibiendo dentro de una zona final.','8 a 12 años'],['Vóley con bote','Deporte','Mantener la pelota pasando por encima de una red permitiendo un bote antes del golpe.','8 a 12 años'],['Carreras de reacción','Atletismo','Salir desde distintas posiciones al escuchar o ver una señal y correr una distancia breve.','6 a 12 años'],['Relevos variados','Atletismo','Carreras por equipos con diferentes desplazamientos, objetos y distancias.','6 a 12 años'],['Carrera de números','Atletismo','Cada niño tiene un número; al escucharlo sale, rodea una marca y vuelve.','6 a 12 años'],['Velocidad por zonas','Atletismo','Recorrer tramos cambiando de ritmo: suave, medio, rápido y recuperación.','8 a 12 años'],['Respirar como globo','Vuelta a la calma','Inspirar lentamente inflando el abdomen y exhalar como si el cuerpo fuera un globo que se desinfla.','3 a 12 años'],['Estirar animales','Vuelta a la calma','Estiramientos suaves imitando posiciones de gato, perro, mariposa y serpiente.','3 a 10 años'],['Nube tranquila','Vuelta a la calma','Acostados o sentados imaginar una nube mientras se relaja cada parte del cuerpo.','3 a 9 años']];
-const curriculum={'3 años':[['Conciencia corporal · El cuerpo y su identificación','El niño identificará su propio cuerpo y explorará nociones topológicas básicas para ubicarse en situaciones motrices concretas.'],['Juego y recreación · Juegos motores simbólicos','El niño explorará juegos motores simbólicos para ampliar su esquema corporal y la acción de jugar con otros.'],['Deporte · Desplazamientos en el entorno','El niño realizará diferentes desplazamientos vinculados a situaciones de iniciación deportiva para descubrir posibilidades de movimiento.'],['Gimnasia · Giros y equilibrio','El niño experimentará giros y equilibrios para reconocer posibilidades de movimiento de su propio cuerpo.'],['Prácticas expresivas · Ritmos corporales','El niño explorará ritmos corporales para expresarse y comunicarse mediante el movimiento.']],'4 años':[['Conciencia corporal · Ubicación del cuerpo en el entorno','El niño ubicará su propio cuerpo en relación con el entorno para resolver situaciones motrices con mayor autonomía.'],['Juego y recreación · Juegos simbólicos y de persecución','El niño ampliará sus formas de jugar mediante juegos simbólicos y de persecución, asumiendo diferentes roles.'],['Deporte · Desplazamientos y manipulaciones iniciales','El niño integrará desplazamientos y manipulaciones en situaciones de iniciación deportiva para ampliar sus posibilidades motrices.'],['Gimnasia · Giros, equilibrio, saltos y manipulación','El niño experimentará giros, equilibrios, saltos y manipulaciones para reconocer y controlar su cuerpo.'],['Prácticas expresivas · Imagen corporal y ritmo','El niño construirá su imagen corporal y reconocerá ritmos propios y de otros para comunicarse corporalmente.']],'5 años':[['Conciencia corporal · Espacio propio, próximo y lejano','El niño percibirá su cuerpo en los espacios propio, próximo y lejano para orientarse y actuar en relación con objetos y personas.'],['Juego y recreación · Juegos simbólicos en espacios cambiantes','El niño ampliará juegos motores simbólicos en espacios estructurantes y cambiantes para resolver nuevas situaciones lúdicas.'],['Juego y recreación · Juegos de persecución con cambio de roles','El niño participará en juegos motores de persecución con cambio de roles para comprender reglas e interactuar con otros.'],['Deporte · Desplazamientos y manipulaciones','El niño integrará desplazamientos con manipulaciones de objetos para iniciarse en situaciones deportivas variadas.'],['Gimnasia · Giros, equilibrio, saltos y manipulación','El niño realizará giros, equilibrios, saltos y manipulaciones para ampliar el control de su cuerpo y de los objetos.'],['Prácticas expresivas · Ritmo, postura y comunicación','El niño utilizará ritmo, postura y lenguaje corporal para expresar ideas, emociones y situaciones.']],'1.º año':[['Conciencia corporal · Nociones topológicas y lateralidad','El niño identificará y situará su cuerpo usando nociones topológicas y lateralidad para orientarse en actividades motrices.'],['Juego y recreación · Juegos motores con reglas variadas','El niño realizará juegos motores con reglas variadas para comprender consignas y participar con otros.'],['Deporte · Desplazamientos y manipulaciones','El niño incorporará desplazamientos y manipulaciones de elementos en juegos de iniciación deportiva para desarrollar multilateralidad.'],['Deporte · Reglas y técnicas básicas','El niño comprenderá reglas mínimas e incorporará técnicas básicas para participar en deportes individuales y colectivos.'],['Gimnasia · Equilibrio, trepas y saltos','El niño realizará equilibrios, trepas, suspensiones y saltos para ampliar sus habilidades gimnásticas.'],['Prácticas expresivas · Emociones, ritmo y danza','El niño representará emociones y sentimientos mediante el cuerpo, el ritmo y la danza.']],'2.º año':[['Conciencia corporal · Tiempo, espacio y trayectoria','El niño percibirá su cuerpo en relación con tiempo, espacio, ritmo, trayectoria y velocidad para resolver situaciones motrices.'],['Juego y recreación · Juegos motores y sus reglas','El niño realizará distintos juegos motores e identificará sus reglas e intenciones para participar de forma consciente.'],['Deporte · Lanzar y recibir','El niño se apropiará de diferentes desplazamientos y manipulaciones con énfasis en lanzar y recibir para resolver situaciones de juego.'],['Deporte · Multilateralidad con oposición','El niño participará en juegos motores con oposición para desarrollar multilateralidad, orientación espacial y toma de decisiones.'],['Gimnasia · Equilibrio, trepas y balanceo','El niño realizará equilibrios, trepas, suspensión y balanceo para ampliar sus habilidades gimnásticas.']],'3.º año':[['Conciencia corporal · Cuerpo en acción con el entorno','El niño identificará su cuerpo en relación con diferentes variantes para intervenir activamente en el entorno.'],['Deporte · Juegos con diferentes lógicas deportivas','El niño identificará y vinculará juegos con diferentes lógicas deportivas para comprender formas variadas de participación.'],['Gimnasia · Equilibrios, trepas y posiciones invertidas','El niño combinará equilibrios, trepas y posiciones invertidas para resolver secuencias motrices.'],['Juego y recreación · Reglas, roles y juegos tradicionales','El niño comunicará reglas e intenciones de juegos motores y asumirá diferentes roles.'],['Prácticas expresivas · Imitación, ritmo y tensión muscular','El niño organizará situaciones expresivas mediante imitación, ritmo y variaciones de tensión muscular.']],'4.º año':[['Conciencia corporal · Toma de decisiones corporales','El niño elaborará movimientos de su cuerpo mediante diferentes tomas de decisiones para resolver situaciones del entorno.'],['Deporte · Deportes en diferentes medios y reglas simples','El niño realizará e identificará variados deportes en diferentes medios con reglas simples para ampliar su cultura deportiva.'],['Gimnasia · Equilibrios en altura y trepas','El niño combinará equilibrios en altura, trepas y posiciones invertidas para resolver desafíos motrices.'],['Juego y recreación · Perspectiva inclusiva','El niño participará en juegos motores con perspectiva inclusiva para comprender reglas e intenciones.'],['Prácticas expresivas · Ritmo, postura y danzas','El niño utilizará ritmo, postura y danzas para expresar y comunicar experiencias corporales.']],'5.º año':[['Conciencia corporal · Encadenamiento de movimientos','El niño explorará y analizará encadenamientos de movimientos para tomar decisiones asertivas.'],['Deporte · Deportes, reglas y práctica autónoma','El niño explicará y practicará diferentes deportes y sus reglas con creciente autonomía.'],['Gimnasia · Secuencias gimnásticas y acrobacias','El niño elaborará secuencias gimnásticas y acrobáticas con habilidades aprendidas.'],['Juego y recreación · Lógicas cooperativas y tradicionales','El niño seleccionará y explicará diferentes lógicas de juego para disfrutar y participar de forma inclusiva.'],['Prácticas expresivas · Ritmos, postura y danzas','El niño analizará ritmos, postura y danzas para ampliar su repertorio expresivo.']],'6.º año':[['Conciencia corporal · Movimiento propio y del otro','El niño reflexionará sobre los movimientos de su cuerpo y del otro para interactuar y transformar el entorno.'],['Deporte · Sistemas tácticos','El niño identificará sistemas tácticos de diferentes deportes para tomar decisiones en situación de juego.'],['Deporte · Reglamento e iniciación al arbitraje','El niño internalizará reglamentos e iniciará prácticas de arbitraje para participar con autonomía y responsabilidad.'],['Gimnasia · Tensión, relajación y autocuidado','El niño explorará distintos grados de tensión y relajación cuidándose y cuidando a los demás.'],['Juego y recreación · Grandes juegos','El niño identificará y generará grandes juegos en diversos contextos.'],['Prácticas expresivas · Creación y comunicación corporal','El niño creará y comunicará mediante el cuerpo propuestas expresivas con creciente autonomía.']]};
-let selectedCategory='Todas',pickerTarget=null;function iconFor(cat){return {'Persecución':'🏃','Roles y simbólicos':'🎭','Cooperativos':'🤝','Conciencia corporal':'🧍','Orientación espacial':'🧭','Manipulación':'⚽','Equilibrio y gimnasia':'🤸','Expresión y ritmo':'🎵','Deporte':'🏀','Atletismo':'🏁','Vuelta a la calma':'🌿'}[cat]||'🎲'}function allActivities(){const custom=JSON.parse(localStorage.getItem('profego-custom-activities')||'[]');return baseActivities.map((x,i)=>({id:'b'+i,name:x[0],cat:x[1],desc:x[2],age:x[3],base:true})).concat(custom)}function show(id,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.side button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');if(id==='plans')renderPlans();if(id==='resources')renderResources();if(id==='activities')renderActivities()}function showById(id,i){show(id,document.querySelectorAll('.side button')[i])}function updateContents(){content.innerHTML=curriculum[group.value].map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');updateGoal()}function updateGoal(){const d=curriculum[group.value][+content.value||0];goal.value=d[1];sideGoal.textContent=d[1]}function activityPool(contentName){const s=contentName.toLowerCase();let cats=['Cooperativos','Conciencia corporal','Orientación espacial'];if(s.includes('persecución'))cats=['Persecución','Roles y simbólicos'];else if(s.includes('simbó'))cats=['Roles y simbólicos','Persecución'];else if(s.includes('deporte'))cats=['Deporte','Manipulación'];else if(s.includes('gimnasia'))cats=['Equilibrio y gimnasia','Conciencia corporal'];else if(s.includes('expres'))cats=['Expresión y ritmo','Conciencia corporal'];else if(s.includes('conciencia'))cats=['Conciencia corporal','Orientación espacial'];return allActivities().filter(a=>cats.includes(a.cat))}function card(a,i,lesson){return `<article class="game" data-id="${a.id}"><h4>${i+1} · ${a.name}</h4><div class="scene">${iconFor(a.cat)}</div><p>${a.desc}</p><div class="actions"><button onclick="suggest(this,${lesson},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`}function generate(){try{
+// Contenidos organizados por nivel: ANEP EBI, tramos 1–4. Rótulos resumidos; metas sugeridas y editables.
+const curriculum={
+  "3 años": [
+    [
+      "Conciencia corporal · Identificación corporal",
+      "Los niños realizarán propuestas de identificación corporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Dentro/fuera; arriba/abajo",
+      "Los niños realizarán propuestas de dentro/fuera; arriba/abajo para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Antes y después",
+      "Los niños realizarán actividades de antes y después para resolver desafíos adecuados a su grado y explicar sus decisiones."
+    ],
+    [
+      "Conciencia corporal · Descubrimiento de la corporeidad",
+      "Los niños realizarán propuestas de descubrimiento de la corporeidad para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Juego y recreación · Simbolización motriz y jugar",
+      "Los niños realizarán propuestas de simbolización motriz y jugar para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Deporte · Exploración corporal",
+      "Los niños realizarán propuestas de exploración corporal para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Desplazamientos iniciales",
+      "Los niños realizarán propuestas de desplazamientos iniciales para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Reconocimiento corporal",
+      "Los niños realizarán propuestas de reconocimiento corporal para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Giros longitudinales",
+      "Los niños realizarán propuestas de Giros longitudinales para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Prácticas expresivas · Corporeidad y Ritmo",
+      "Los niños realizarán propuestas de corporeidad y Ritmo para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "4 años": [
+    [
+      "Conciencia corporal · Ubicación corporal; arriba/abajo",
+      "Los niños realizarán propuestas de ubicación corporal; arriba/abajo para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Orientación ante objetos",
+      "Los niños realizarán propuestas de orientación ante objetos para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Antes/después",
+      "Los niños realizarán propuestas de antes/después para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Juego y recreación · Fantasía y ficción",
+      "Los niños realizarán propuestas de fantasía y ficción para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Persecución",
+      "Los niños realizarán propuestas de persecución para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Jugar en la naturaleza",
+      "Los niños realizarán propuestas de jugar en la naturaleza para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Deporte · Ubicación corporal",
+      "Los niños realizarán propuestas de ubicación corporal para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Traslados con objetos",
+      "Los niños realizarán propuestas de traslados con objetos para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Roles e interacción",
+      "Los niños realizarán propuestas de roles e interacción para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Ubicación corporal",
+      "Los niños realizarán propuestas de ubicación corporal para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Giros longitudinales",
+      "Los niños realizarán propuestas de Giros longitudinales para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Prácticas expresivas · Imagen de sí",
+      "Los niños realizarán propuestas de imagen de sí para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Ritmo compartida y sentidos",
+      "Los niños realizarán propuestas de Ritmo compartida y sentidos para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Posturas y actitudes",
+      "Los niños realizarán propuestas de posturas y actitudes para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Comunicación gestual",
+      "Los niños realizarán propuestas de comunicación gestual para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "5 años": [
+    [
+      "Conciencia corporal · Espacios propio/cercano/lejano",
+      "Los niños realizarán propuestas de espacios propio/cercano/lejano para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Tiempo, cuerpo y objetos",
+      "Los niños realizarán propuestas de tiempo, cuerpo y objetos para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Corporeidad terrestre/acuática",
+      "Los niños realizarán propuestas de corporeidad terrestre/acuática para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Juego y recreación · Simbolización en espacios variables",
+      "Los niños realizarán propuestas de simbolización en espacios variables para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Persecución y rotación de roles",
+      "Los niños realizarán propuestas de persecución y rotación de roles para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Juego cotidiano y acuático",
+      "Los niños realizarán propuestas de juego cotidiano y acuático para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Experiencias en la naturaleza",
+      "Los niños realizarán propuestas de experiencias en la naturaleza para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Deporte · Ubicación espacial",
+      "Los niños realizarán propuestas de ubicación espacial para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Traslados manipulando objetos",
+      "Los niños realizarán propuestas de traslados manipulando objetos para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Interacción sensoriomotriz",
+      "Los niños realizarán propuestas de interacción sensoriomotriz para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Ingreso al agua y giros",
+      "Los niños realizarán propuestas de ingreso al agua y giros para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Ubicación espacial",
+      "Los niños realizarán propuestas de ubicación espacial para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Giros en distintos ejes",
+      "Los niños realizarán propuestas de Giros en distintos ejes para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Equilibrio estático",
+      "Los niños realizarán propuestas de Equilibrio estático para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Salto con dos pies",
+      "Los niños realizarán propuestas de salto con dos pies para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Objetos sin desplazamiento",
+      "Los niños realizarán propuestas de objetos sin desplazamiento para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Prácticas expresivas · Imagen y representación",
+      "Los niños realizarán propuestas de imagen y representación para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Ritmo y sentidos",
+      "Los niños realizarán propuestas de Ritmo y sentidos para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Comunicación gestual",
+      "Los niños realizarán propuestas de comunicación gestual para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Posturas y actitudes",
+      "Los niños realizarán propuestas de posturas y actitudes para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "1.º año": [
+    [
+      "Conciencia corporal · Orientación y lateralidad",
+      "Los niños realizarán propuestas de orientación y lateralidad para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Espacios y objetos",
+      "Los niños realizarán propuestas de espacios y objetos para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Coordinación espacio/tiempo",
+      "Los niños realizarán propuestas de coordinación espacio/tiempo para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Juego y recreación · Consignas y reglas variables",
+      "Los niños realizarán propuestas de consignas y reglas variables para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Cooperación guiada",
+      "Los niños realizarán propuestas de cooperación guiada para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Tradición lúdica",
+      "Los niños realizarán propuestas de tradición lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Naturaleza y ubicación",
+      "Los niños realizarán propuestas de naturaleza y ubicación para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · La acción de jugar",
+      "Los niños realizarán propuestas de la acción de jugar para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Deporte · Iniciación y objetos en distintos medios",
+      "Los niños realizarán propuestas de iniciación y objetos en distintos medios para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Multilateralidad",
+      "Los niños realizarán propuestas de multilateralidad para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Reglas y técnica inicial",
+      "Los niños realizarán propuestas de reglas y técnica inicial para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Convivencia deportiva",
+      "Los niños realizarán propuestas de convivencia deportiva para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Propulsión acuática",
+      "Los niños realizarán propuestas de propulsión acuática para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Rol adelante facilitado",
+      "Los niños realizarán propuestas de Rol adelante facilitado para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Equilibrio estático/dinámico bajo",
+      "Los niños realizarán propuestas de Equilibrio estático/dinámico bajo para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Trepas y suspensión",
+      "Los niños realizarán propuestas de Trepas y suspensión para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Inversiones apoyadas",
+      "Los niños realizarán propuestas de inversiones apoyadas para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Alineación corporal",
+      "Los niños realizarán propuestas de alineación corporal para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Saltos a una/dos piernas",
+      "Los niños realizarán propuestas de saltos a una/dos piernas para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Manipulación y trayectos",
+      "Los niños realizarán propuestas de manipulación y trayectos para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Prácticas expresivas · Emoción representada",
+      "Los niños realizarán propuestas de emoción representada para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Ritmo y pausa",
+      "Los niños realizarán propuestas de Ritmo y pausa para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Postura y respiración",
+      "Los niños realizarán propuestas de postura y respiración para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza: tradición y migración",
+      "Los niños realizarán propuestas de danza: tradición y migración para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "2.º año": [
+    [
+      "Conciencia corporal · Percepción: tiempo, espacio y velocidad",
+      "Los niños realizarán propuestas de percepción: tiempo, espacio y velocidad para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Ritmo, trayectorias y lateralidad",
+      "Los niños realizarán propuestas de ritmo, trayectorias y lateralidad para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Secuenciación espaciotemporal",
+      "Los niños realizarán propuestas de secuenciación espaciotemporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Emoción terrestre/acuática",
+      "Los niños realizarán propuestas de emoción terrestre/acuática para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Juego y recreación · Reglas y propósitos",
+      "Los niños realizarán propuestas de reglas y propósitos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Cooperación y roles",
+      "Los niños realizarán propuestas de cooperación y roles para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Tradición lúdica",
+      "Los niños realizarán propuestas de tradición lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Naturaleza y comunidad",
+      "Los niños realizarán propuestas de naturaleza y comunidad para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Práctica lúdica",
+      "Los niños realizarán propuestas de práctica lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Roles acuáticos",
+      "Los niños realizarán propuestas de roles acuáticos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Deporte · Traslados, envíos y recepciones",
+      "Los niños realizarán propuestas de traslados, envíos y recepciones para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Multilateralidad con oposición",
+      "Los niños realizarán propuestas de multilateralidad con oposición para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Reglas y técnica inicial",
+      "Los niños realizarán propuestas de reglas y técnica inicial para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Patrimonio deportivo",
+      "Los niños realizarán propuestas de patrimonio deportivo para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Propulsión ventral/dorsal",
+      "Los niños realizarán propuestas de propulsión ventral/dorsal para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Rol adelante",
+      "Los niños realizarán propuestas de Rol adelante para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Equilibrio a distintas alturas",
+      "Los niños realizarán propuestas de Equilibrio a distintas alturas para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Trepas, suspensión y balanceo",
+      "Los niños realizarán propuestas de Trepas, suspensión y balanceo para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Inversiones apoyadas",
+      "Los niños realizarán propuestas de inversiones apoyadas para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Alineación corporal",
+      "Los niños realizarán propuestas de alineación corporal para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Saltos enlazados",
+      "Los niños realizarán propuestas de saltos enlazados para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Manipulación con alturas/apoyos",
+      "Los niños realizarán propuestas de manipulación con alturas/apoyos para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Prácticas expresivas · Emoción comunicada",
+      "Los niños realizarán propuestas de emoción comunicada para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Ritmo: pausa, intensidad, duración",
+      "Los niños realizarán propuestas de Ritmo: pausa, intensidad, duración para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Postura y tensión",
+      "Los niños realizarán propuestas de postura y tensión para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza: tradición y migración",
+      "Los niños realizarán propuestas de danza: tradición y migración para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "3.º año": [
+    [
+      "Conciencia corporal · Acción en el entorno",
+      "Los niños realizarán propuestas de acción en el entorno para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Corporeidad y exploración",
+      "Los niños realizarán propuestas de corporeidad y exploración para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Secuenciación espaciotemporal",
+      "Los niños realizarán propuestas de secuenciación espaciotemporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Emoción terrestre/acuática",
+      "Los niños realizarán propuestas de emoción terrestre/acuática para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Deporte · Lógicas individuales/colectivas",
+      "Los niños realizarán propuestas de lógicas individuales/colectivas para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Invasión y cancha dividida",
+      "Los niños realizarán propuestas de invasión y cancha dividida para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Con y sin elementos",
+      "Los niños realizarán actividades de con y sin elementos para resolver desafíos adecuados a su grado y explicar sus decisiones."
+    ],
+    [
+      "Deporte · Desempeño y marcas: atletismo",
+      "Los niños realizarán actividades de desempeño y marcas: atletismo para resolver desafíos adecuados a su grado y explicar sus decisiones."
+    ],
+    [
+      "Deporte · Medios terrestres, acuáticos y aéreos",
+      "Los niños realizarán actividades de medios terrestres, acuáticos y aéreos para resolver desafíos adecuados a su grado y explicar sus decisiones."
+    ],
+    [
+      "Gimnasia · Rol adelante con impulso",
+      "Los niños realizarán propuestas de Rol adelante con impulso para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Equilibrio combinado",
+      "Los niños realizarán propuestas de Equilibrio combinado para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Trepas combinada",
+      "Los niños realizarán propuestas de Trepas combinada para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Inversiones y postura",
+      "Los niños realizarán propuestas de inversiones y postura para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Saltos enlazados",
+      "Los niños realizarán propuestas de saltos enlazados para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Manipulación multiplanar",
+      "Los niños realizarán propuestas de manipulación multiplanar para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Juego y recreación · Reglas, propósitos y roles",
+      "Los niños realizarán propuestas de reglas, propósitos y roles para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Cooperación",
+      "Los niños realizarán propuestas de cooperación para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Tradición lúdica",
+      "Los niños realizarán propuestas de tradición lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Naturaleza y comunidad",
+      "Los niños realizarán propuestas de naturaleza y comunidad para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Práctica lúdica",
+      "Los niños realizarán propuestas de práctica lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Roles acuáticos",
+      "Los niños realizarán propuestas de roles acuáticos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Prácticas expresivas · Imitación emotiva",
+      "Los niños realizarán propuestas de imitación emotiva para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Ritmo espacial",
+      "Los niños realizarán propuestas de Ritmo espacial para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Tensión y postura",
+      "Los niños realizarán propuestas de tensión y postura para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza tradicional",
+      "Los niños realizarán propuestas de danza tradicional para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "4.º año": [
+    [
+      "Conciencia corporal · Decisiones motrices",
+      "Los niños realizarán propuestas de decisiones motrices para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Corporeidad y autoconocimiento",
+      "Los niños realizarán propuestas de corporeidad y autoconocimiento para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Secuenciación espaciotemporal",
+      "Los niños realizarán propuestas de secuenciación espaciotemporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Emoción terrestre/acuática",
+      "Los niños realizarán propuestas de emoción terrestre/acuática para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Deporte · Prácticas terrestres",
+      "Los niños realizarán propuestas de prácticas terrestres para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Prácticas acuáticas",
+      "Los niños realizarán propuestas de prácticas acuáticas para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Prácticas aéreas; reglas sencillas",
+      "Los niños realizarán propuestas de prácticas aéreas; reglas sencillas para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Rol atrás facilitado",
+      "Los niños realizarán propuestas de Rol atrás facilitado para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Equilibrio elevado combinado",
+      "Los niños realizarán propuestas de Equilibrio elevado combinado para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Trepas e inversiones",
+      "Los niños realizarán propuestas de Trepas e inversiones para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Saltos enlazados",
+      "Los niños realizarán propuestas de saltos enlazados para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Manipulación multiplanar en movimiento",
+      "Los niños realizarán propuestas de manipulación multiplanar en movimiento para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Juego y recreación · Reglas e inclusión",
+      "Los niños realizarán propuestas de reglas e inclusión para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Cooperación",
+      "Los niños realizarán propuestas de cooperación para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Tradición lúdica",
+      "Los niños realizarán propuestas de tradición lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Grandes juegos naturales",
+      "Los niños realizarán propuestas de grandes juegos naturales para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Práctica lúdica",
+      "Los niños realizarán propuestas de práctica lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Socialización acuática",
+      "Los niños realizarán propuestas de socialización acuática para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Prácticas expresivas · Movimiento rítmico con objetos",
+      "Los niños realizarán propuestas de movimiento rítmico con objetos para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Conciencia corporal cotidiana",
+      "Los niños realizarán propuestas de conciencia corporal cotidiana para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza: tradición y migración",
+      "Los niños realizarán propuestas de danza: tradición y migración para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "5.º año": [
+    [
+      "Conciencia corporal · Encadenamiento emotivo terrestre/acuático",
+      "Los niños realizarán propuestas de encadenamiento emotivo terrestre/acuático para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Corporeidad y cambio personal",
+      "Los niños realizarán propuestas de corporeidad y cambio personal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Secuenciación espaciotemporal",
+      "Los niños realizarán propuestas de secuenciación espaciotemporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Deporte · Autonomía y reglas terrestres",
+      "Los niños realizarán propuestas de autonomía y reglas terrestres para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Autonomía y reglas acuáticas",
+      "Los niños realizarán propuestas de autonomía y reglas acuáticas para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Autonomía y reglas aéreas",
+      "Los niños realizarán propuestas de autonomía y reglas aéreas para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Composición gimnástica",
+      "Los niños realizarán propuestas de composición gimnástica para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Acrobacia guiada",
+      "Los niños realizarán propuestas de acrobacia guiada para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Objetos y acompañamiento musical",
+      "Los niños realizarán propuestas de objetos y acompañamiento musical para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Asistencia entre compañeros",
+      "Los niños realizarán propuestas de asistencia entre compañeros para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Juego y recreación · Lógicas cooperativas",
+      "Los niños realizarán propuestas de lógicas cooperativas para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Tradición lúdica",
+      "Los niños realizarán propuestas de tradición lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Grandes juegos naturales inclusivos",
+      "Los niños realizarán propuestas de grandes juegos naturales inclusivos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Práctica lúdica",
+      "Los niños realizarán propuestas de práctica lúdica para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Socialización acuática",
+      "Los niños realizarán propuestas de socialización acuática para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Prácticas expresivas · Imitación emotiva",
+      "Los niños realizarán propuestas de imitación emotiva para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · ritmos y cultura",
+      "Los niños realizarán propuestas de ritmos y cultura para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Tensión y postura",
+      "Los niños realizarán propuestas de tensión y postura para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza contemporánea/popular",
+      "Los niños realizarán propuestas de danza contemporánea/popular para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ],
+  "6.º año": [
+    [
+      "Conciencia corporal · Interacción emotiva terrestre/acuática",
+      "Los niños realizarán propuestas de interacción emotiva terrestre/acuática para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Tono: relajación, tensión, Equilibrio",
+      "Los niños realizarán propuestas de tono: relajación, tensión, Equilibrio para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Conciencia corporal · Secuenciación espaciotemporal",
+      "Los niños realizarán propuestas de secuenciación espaciotemporal para reconocer sus posibilidades y resolver desafíos con mayor autonomía."
+    ],
+    [
+      "Deporte · Organización táctica",
+      "Los niños realizarán propuestas de organización táctica para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Técnica en contexto táctico",
+      "Los niños realizarán propuestas de técnica en contexto táctico para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Deporte · Regulación y arbitraje",
+      "Los niños realizarán propuestas de regulación y arbitraje para resolver situaciones deportivas adecuadas al nivel y comprender sus acuerdos."
+    ],
+    [
+      "Gimnasia · Modulación muscular",
+      "Los niños realizarán propuestas de modulación muscular para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Cuidado propio y compartido",
+      "Los niños realizarán propuestas de cuidado propio y compartido para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Gimnasia · Composición con música",
+      "Los niños realizarán propuestas de composición con música para mejorar el control del movimiento con ayudas y cuidados adecuados."
+    ],
+    [
+      "Juego y recreación · Grandes juegos de base",
+      "Los niños realizarán propuestas de grandes juegos de base para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Grandes juegos nocturnos",
+      "Los niños realizarán propuestas de grandes juegos nocturnos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Orientación y naturaleza",
+      "Los niños realizarán propuestas de orientación y naturaleza para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Creación de espacios lúdicos",
+      "Los niños realizarán propuestas de creación de espacios lúdicos para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Juego y recreación · Creación acuática",
+      "Los niños realizarán propuestas de creación acuática para participar, acordar consignas y compartir experiencias con sus compañeros."
+    ],
+    [
+      "Prácticas expresivas · Gestualidad emotiva",
+      "Los niños realizarán propuestas de gestualidad emotiva para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · ritmos y cultura",
+      "Los niños realizarán propuestas de ritmos y cultura para comunicar ideas y emociones mediante el movimiento."
+    ],
+    [
+      "Prácticas expresivas · Danza contemporánea/tradicional/popular",
+      "Los niños realizarán propuestas de danza contemporánea/tradicional/popular para comunicar ideas y emociones mediante el movimiento."
+    ]
+  ]
+};
+let selectedCategory='Todas',pickerTarget=null;function iconFor(cat){return {'Persecución':'🏃','Roles y simbólicos':'🎭','Cooperativos':'🤝','Conciencia corporal':'🧍','Orientación espacial':'🧭','Manipulación':'⚽','Equilibrio y gimnasia':'🤸','Expresión y ritmo':'🎵','Deporte':'🏀','Atletismo':'🏁','Vuelta a la calma':'🌿'}[cat]||'🎲'}function allActivities(){const custom=JSON.parse(localStorage.getItem('profego-custom-activities')||'[]');return baseActivities.map((x,i)=>({id:'b'+i,name:x[0],cat:x[1],desc:x[2],age:x[3],base:true})).concat(custom)}function show(id,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.side button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');if(id==='plans')renderPlans();if(id==='resources')renderResources();if(id==='activities')renderActivities()}function showById(id,i){show(id,document.querySelectorAll('.side button')[i])}function updateContents(){const rows=curriculum[group.value]||[];let previous='',markup='';rows.forEach((x,i)=>{const category=x[0].split(' · ')[0];if(category!==previous){if(previous)markup+='</optgroup>';markup+=`<optgroup label="${category}">`;previous=category}markup+=`<option value="${i}">${x[0]}</option>`});if(previous)markup+='</optgroup>';content.innerHTML=markup;content.value='0';updateGoal()}function updateGoal(){const d=curriculum[group.value][+content.value||0];goal.value=d[1];sideGoal.textContent=d[1];const g=group.value;const tramo=g.includes('años')?1:+g[0]<=2?2:+g[0]<=4?3:4;const note=content.closest('.box').querySelector('.curriculum-note');if(note)note.innerHTML='ANEP EBI · Tramo '+tramo+' · '+curriculum[g].length+' contenidos<br><a target="_blank" rel="noopener" href='+JSON.stringify(["https://www.anep.edu.uy/sites/default/files/images/te-programas/2024/ajustes/1er_ciclo/Educaci%C3%B3n%20F%C3%ADsica%20-%20Tramo%201_2024.pdf","https://www.anep.edu.uy/sites/default/files/images/te-programas/2024/ajustes/1er_ciclo/Educaci%C3%B3n%20F%C3%ADsica%20-%20Tramo%202_2024.pdf","https://www.anep.edu.uy/sites/default/files/images/te-programas/2023/finales/espacios/espacio-desarrollo-personal-y-conciencia-corporal/Educaci%C3%B3n%20F%C3%ADsica%20-%20Tramo%203.pdf","https://www.anep.edu.uy/sites/default/files/images/te-programas/2023/finales/espacios/espacio-desarrollo-personal-y-conciencia-corporal/Educaci%C3%B3n%20F%C3%ADsica%20-%20Tramo%204.pdf"][tramo-1])+'>Ver programa oficial</a><br>Rótulos resumidos. Meta sugerida y editable.'}function activityPool(contentName){const s=contentName.toLowerCase();let cats=['Cooperativos','Conciencia corporal','Orientación espacial'];if(s.includes('persecución'))cats=['Persecución','Roles y simbólicos'];else if(s.includes('simbó'))cats=['Roles y simbólicos','Persecución'];else if(s.includes('deporte'))cats=['Deporte','Manipulación'];else if(s.includes('gimnasia'))cats=['Equilibrio y gimnasia','Conciencia corporal'];else if(s.includes('expres'))cats=['Expresión y ritmo','Conciencia corporal'];else if(s.includes('conciencia'))cats=['Conciencia corporal','Orientación espacial'];return allActivities().filter(a=>cats.includes(a.cat))}function card(a,i,lesson){return `<article class="game" data-id="${a.id}"><h4>${i+1} · ${a.name}</h4><div class="scene">${iconFor(a.cat)}</div><p>${a.desc}</p><div class="actions"><button onclick="suggest(this,${lesson},${i})">↻ Sugerir otro</button><button class="edit" onclick="editGame(this)">✎ Editar</button><button class="choose" onclick="openActivityPicker(this)">🎲 Elegir del banco</button></div></article>`}function generate(){try{
  const n=+count.value,d=curriculum[group.value][+content.value||0],pool=activityPool(d[0]),fallback=allActivities();
  const source=(pool.length?pool:fallback).slice();if(!source.length)throw new Error('No hay actividades');
  const key='profego-inline-history-v1';let hist=[];try{hist=JSON.parse(localStorage.getItem(key)||'[]')}catch{}
